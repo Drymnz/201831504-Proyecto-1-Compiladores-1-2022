@@ -17,11 +17,11 @@ import java_cup.runtime.*;
     }
     /*CODE*/
 %}
-LETRAS = [á|é|í|ó|ú|ñ|â|ê|î|ô|û]
-CARACTER = {LETRAS} | [a-zA-Z] | _ 
+LETRAS = [á|é|í|ó|ú|ñ|â|ê|î|ô|û|Ã|±]
+CARACTER = {LETRAS} | [a-zA-Z] | _  
 ID = {CARACTER} ({CARACTER} | {ENTERO})*
 STRING = "\"" ~"\"" 
-ENTERO =  [0]|[1-9][0-9]+
+ENTERO =  ([0]|[1-9][0-9]*)
 DECIMAL = {ENTERO}[.]{ENTERO}
 espacio =[\r|\t|\f|\n|\s| ]+
 %%
@@ -33,20 +33,20 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FINAL INGNORAR*/
 /*RECORDAR  {return new Symbol(sym.BYTE(INT),yyline(INT),yycolumn, (yytext()))(OBJET); }*/
 /*VARIALBES PRIMITIVAS*/
-"byte"              {return new Symbol(sym.BYTE,yyline,yycolumn, (yytext())); }
-"short"             {return new Symbol(sym.SHORT,yyline,yycolumn, (yytext())); }
-"int"               {return new Symbol(sym.INT,yyline,yycolumn, (yytext())); }
-"long"              {return new Symbol(sym.LONG,yyline,yycolumn, (yytext())); }
-"float"             {return new Symbol(sym.FLOAT,yyline,yycolumn, (yytext())); }
-"double"            {return new Symbol(sym.DOUBLE,yyline,yycolumn, (yytext())); }
-"char"              {return new Symbol(sym.CHAR,yyline,yycolumn, (yytext())); }
-"boolean"           {return new Symbol(sym.BOOLEAN,yyline,yycolumn, (yytext())); }
-"String"            {return new Symbol(sym.STRING,yyline,yycolumn, (yytext())); }
+"byte"              {print("byte");return new Symbol(sym.BYTE,yyline,yycolumn, (yytext())); }
+"short"             {print("short");return new Symbol(sym.SHORT,yyline,yycolumn, (yytext())); }
+"int"               {print("int");return new Symbol(sym.INT,yyline,yycolumn, (yytext())); }
+"long"              {print("long");return new Symbol(sym.LONG,yyline,yycolumn, (yytext())); }
+"float"             {print("float");return new Symbol(sym.FLOAT,yyline,yycolumn, (yytext())); }
+"double"            {print("double");return new Symbol(sym.DOUBLE,yyline,yycolumn, (yytext())); }
+"char"              {print("char");return new Symbol(sym.CHAR,yyline,yycolumn, (yytext())); }
+"boolean"           {print("boolean");return new Symbol(sym.BOOLEAN,yyline,yycolumn, (yytext())); }
+"String"            {print("String");return new Symbol(sym.STRING,yyline,yycolumn, (yytext())); }
 /*FINAL VARIALBES PRIMITIVAS*/
 "true"              {print("true");return new Symbol(sym.TRUE,yyline,yycolumn, (yytext())); }
 "false"             {print("false");return new Symbol(sym.FALSE,yyline,yycolumn, (yytext())); }
 {DECIMAL}"f"        {print("F");return new Symbol(sym.F,yyline,yycolumn, (yytext())); }
-"/u"{ENTERO}        {print("CHARTN");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext())); }
+"/u"{ENTERO}[a-z]?  {print("CHARTN");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext())); }
 /*PALABRAS RESERVADAS*/
 "package"           {return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext())); }
 "import"            {return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext())); }
@@ -113,10 +113,10 @@ espacio =[\r|\t|\f|\n|\s| ]+
 //== , >= , <=
 /*FINAL SIMBOLOS OPERADOR RELACIONALES*/
 /*SIMBOLO DE AGRUPACION*/
-"("                 {print("(");return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
-")"                 {print(")");return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
-"{"                 {print("{");return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
-"}"                 {print("}");return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
+"("                 {return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
+")"                 {return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
+"{"                 {return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
+"}"                 {return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
 "["                 {print("[");return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext())); }
 "]"                 {print("]");return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext())); }
 /*FINAL SIMBOLO DE AGRUPACION*/

@@ -11,7 +11,6 @@ import com.cunoc.JFlex_Cup.Java.Sintactico;
 
 public  class App {
     public static final int PUERTO = 7640;
-
     public static void main(String[] args) {
         /*
          * PRUEVAS PARA VER LO SIMPLE
@@ -49,11 +48,12 @@ public  class App {
         /*
          * FIN DE PRUEVAS
          */
-    }
-    public static final int me(){
-        return 0;
-    }
+    }  
 
 
-    
+/*    static int pu = 32;
+    static void p(){}
+    public static void p (){}
+    public static final int enter = 15;
+    public static final void ew(){}*/
 }

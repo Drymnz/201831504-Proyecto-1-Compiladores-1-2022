@@ -61,37 +61,25 @@ terminal MENOR_Q,MAYOR_Q,Y,O;
 terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 /*************************************NO TERMINALES******************************************************/
 non terminal inicio;//INICIO DE TODO
-/*c , d , g ,h ,i , k , q ,r,e,w  */
-non terminal a,l;//no terminales que puede estar en varios lugares
-non terminal b,n,m;//no terminales sobre las varialbes
-non terminal z,f;
+/*c , d , g ,h ,i , k , q ,r,e,w,z,f,u,s,b,n,m,a,l  */
 non terminal String o,j;//operaciones
 /*LA PARTE DE package Y import*/
-non terminal encabezado,importacion,p,s,sp,spp,pc;
+non terminal encabezado,importacion,p,sp,spp,pc;
 /*LA CLASE*/
-non terminal clase,internoClase,vc,staticCfianl,v;
+non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O ATRIBUTOS DE LA CALSE*/
-non terminal atributos,vGlobal,t,tGlobal,vStatic,numEnteroDecimal,vChar,trueOfalse,idIgualEntero;
-non terminal tFactorizacion,numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
-non terminal dSeguidoF,dSeguidos,tDatos;
+non terminal atributos,vGlobal,t,numEnteroDecimal,vChar,trueOfalse;
+non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
+non terminal dSeguidoF,dSeguidos,tDatos,variableID,objectInst,vGlobalFac;
 /*METODOS*/
-non terminal metodo,u,tMetodo,pMetodoS,pMetodo,pMetodoSP;
+non terminal metodo,pMetodoS,pMetodoSP;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
-inicio ::= encabezado clase ;
-
-
-
-
-
-
-
-
-
+inicio ::= encabezado clase;
 /******operaciones matematicas*****/
 j ::= o {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
 | error {::}
@@ -154,13 +142,6 @@ pc ::= PUNTO_COMA
 ;
 /*****FINAL PRIMERA PARTE****/
 /*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
-clase ::= v CLASS ID L_APERTURA metodo L_CIERRE clase
-|
-;
-
-internoClase ::= atributos 
-| metodo 
-;
 v ::= 
 | staticCfianl vc
 | staticCfianl
@@ -176,38 +157,33 @@ vc ::= PUBLIC
 | PRIVATE
 | PROTECTED
 ;
+clase ::= v CLASS ID L_APERTURA internoClase L_CIERRE
+;
+internoClase ::= vGlobal internoClaseFa
+| 
+;
+internoClaseFa ::= variableID ayuda
+|ayuda
+;
+ayuda ::= atributos  internoClase
+| metodo internoClase
+;
+vGlobal ::= vc vGlobalFac
+| vGlobalFac
+;
+vGlobalFac ::= staticCfianl
+| 
+;
 /*FINAL PARTE DE LA CLASE*/
 /*****************ATRIBUTOS DE UNA CLASE**************/
-atributos ::= vGlobal tGlobal p atributos
-|
+atributos ::=  IGUAL t p
+|p
 ;
-
-tGlobal ::= FINAL t  
-| t
+t ::=  tDatos
+|  NEW ID P_APERTURA  objectInst
 ;
-vGlobal ::= vc vStatic
-| vStatic
-;
-vStatic ::= STATIC
-|
-;
-t ::= numEntero tFactorizacion
-| numFloat tFactorizacion
-| numDouble tFactorizacion
-| variableChar tFactorizacion
-| variableBoolean tFactorizacion
-| variableStirng tFactorizacion
-| variableObject tFactorizacion
-;
-tFactorizacion ::=  IGUAL tDatos
-;
-tDatos ::= idIgualEntero
-|F
-|IGUAL numEnteroDecimal
-|vChar
-|trueOfalse
-|TEXT
-| NEW ID P_APERTURA dSeguidos P_CIERRE 
+objectInst ::= dSeguidos P_CIERRE
+| P_CIERRE
 ;
 dSeguidos ::= tDatos dSeguidoF
 ;
@@ -216,6 +192,14 @@ dSeguidoF ::= COMA dSeguidos
 ;
 /*DATOS */
 /*****************VARIABLE**************/
+variableID ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| variableObject 
+| numEntero 
+;
 numFloat ::= FLOAT ID;
 numDouble ::= DOUBLE ID;
 variableChar ::= CHAR ID;
@@ -227,42 +211,32 @@ numEntero ::= BYTE ID
 | INT ID
 | LONG ID 
 ;
-
 /*****************FINAL VARIABLE**************/
-idIgualEntero ::= ID IGUAL ENTERO;
+tDatos ::= numEnteroDecimal
+|vChar
+|trueOfalse
+|TEXT
+|F
+;
 numEnteroDecimal ::= ENTERO
 | DECIMAL
 ;
 vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
 | CHARTN
-| ENTERO
 ;
-//visibilidad local
 trueOfalse ::= TRUE
 |FALSE
 ;
 /*****************FINAL ATRIBUTOS DE UNA CLASE**************/
 /***********************************METODOS**************/
-metodo ::= vGlobal tMetodo P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE  metodo
-|
+metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE 
+|VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE
+|ID P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE
 ;
-tMetodo ::= VOID  ID
-| pMetodo
-| ID
-;
-pMetodoS ::= pMetodo pMetodoSP
+pMetodoS ::= variableID pMetodoSP
 |
 ;
 pMetodoSP ::= COMA pMetodoS
 | 
-;
-
-pMetodo ::= numFloat 
-| numDouble 
-| variableChar 
-| variableBoolean 
-| variableStirng 
-| variableObject 
-| numEntero
 ;
 /***********************************FINAL METODOS**************/
