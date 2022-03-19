@@ -1,0 +1,254 @@
+/*************************************CODE******************************************************/
+package com.cunoc.JFlex_Cup.Java;
+
+import java_cup.runtime.*;
+
+    parser code {:
+        
+        Sintactico(Lexico lexico){
+            super(lexico);
+        }
+
+        public void syntax_error(Symbol cur_token) {
+        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
+        System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
+        }
+/*
+        public void unrecovered_syntax_error(Symbol cur_token) {
+            if (cur_token.sym == sym.EOF) {
+             System.out.println("public void unrecoveredsyntax_error!!!!!!!!!!!!!!");
+            }
+        }*/
+    /**
+     * ***CODE*******
+     */
+   
+    /**
+     * ***END CODE*******
+     */
+:}
+/*************************************TERMINALES******************************************************/
+/*************VARIABLES PRIMITIVAS***************/
+terminal BYTE,SHORT,INT,LONG,FLOAT,F,DOUBLE;//num
+terminal CHAR,CARACTER,CHARTN;//CARACTER
+terminal BOOLEAN,TRUE,FALSE;//boolean
+/*ENCABEZADO*/
+terminal PACKAGE,IMPORT;
+/*************PUNTUACION***************/
+terminal PUNTO,PUNTO_COMA,SIMPLE_COMILLA,DOBLE_PUNTO,COMA;//PUNTUACION
+/*************CLASE***************/
+terminal CLASS,THIS;
+terminal EXNTENDS,IMPLEMENTS,SUPER;//HERENCIA
+/*************TODAS PARTES***************/
+terminal NEW,VOID;
+/*TRY CATCH*/
+terminal TRY,CATCH;
+/*SENTENCIAS DE CONTORL*/
+terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE;
+/*FINAL SENTENCIAS DE CONTORL*/ 
+terminal BREAK,RETURN;
+/*VISIBILIDA*/ 
+terminal PRIVATE,PUBLIC,PROTECTED;
+terminal FINAL,STATIC;//USO DE MEMORIA
+/****************************/
+terminal String DECIMAL,ENTERO,ID,STRING;//TOKEN 
+terminal Stirng TEXT;
+terminal SUMA,RESTA,MULTIPLICACION,DIVISION;//OPERACION
+terminal IGUAL,MODULO;//= 
+/*SIMBOLOS OPERADOR RELACIONALES*/
+terminal MENOR_Q,MAYOR_Q,Y,O;
+/**************************AGRUPACION********************************/
+terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
+/*************************************NO TERMINALES******************************************************/
+non terminal inicio;//INICIO DE TODO
+/*c , d , g ,h ,i , k , q ,r,e,w  */
+non terminal a,l;//no terminales que puede estar en varios lugares
+non terminal b,n,m,u;//no terminales sobre las varialbes
+non terminal z,f;
+non terminal String o,j;//operaciones
+/*LA PARTE DE package Y import*/
+non terminal encabezado,importacion,p,s,sp,spp,pc;
+/*LA CLASE*/
+non terminal clase,internoClase,vc,staticCfianl,v;
+/*VARIABLE GLOBAL O ATRIBUTOS DE LA CALSE*/
+non terminal atributos,vGlobal,t,tGlobal,vStatic,numEnteroDecimal,vChar,trueOfalse,idIgualEntero;
+non terminal tFactorizacion,numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
+non terminal dSeguidoF,dSeguidos,tDatos;
+/*METODOS*/
+non terminal metodo;
+/*************************************PRECEDENCIA******************************************************/
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION, DIVISION;
+/*************************************GRAMATICA******************************************************/
+start with inicio;
+/******INICIO DE TODO *****/
+inicio ::= encabezado clase ;
+//METODO
+metodo ::= ID P_APERTURA u P_CIERRE L_APERTURA L_CIERRE 
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/******operaciones matematicas*****/
+j ::= o {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
+| error {::}
+;
+o ::= o:a SUMA o:b {: 
+                    double numeroUno= Double.valueOf(a);
+                    double numeroDos= Double.valueOf(b);
+                    double resultado = numeroUno-numeroDos;
+                    RESULT = String.valueOf(resultado);
+// listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("SUMAR", aleft, aright, numeroUno+"+"+numeroDos));
+                    :}
+
+|  o:a RESTA o:b {:
+                double numeroUno= Double.valueOf(a);
+                double numeroDos= Double.valueOf(b);
+                double resultado = numeroUno-numeroDos;
+                RESULT = String.valueOf(resultado);
+// listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("RESTAR", aleft, aright, numeroUno+"-"+numeroDos));
+                    :}
+
+|  o:a DIVISION o:b {:
+                    double numeroUno= Double.valueOf(a);
+                    double numeroDos= Double.valueOf(b);
+                    double resultado = numeroUno/numeroDos;
+                    RESULT = String.valueOf(resultado);
+//listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("DIVIDIR", aleft, aright, numeroUno+"/"+numeroDos));
+                    :}
+
+|  o:a MULTIPLICACION o:b {:
+                    double numeroUno= Double.valueOf(a);
+                    double numeroDos= Double.valueOf(b);
+                    double resultado = numeroUno*numeroDos;
+                    RESULT = String.valueOf(resultado);
+//listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("MULTIPLICAR", aleft, aright, numeroUno+"*"+numeroDos));
+                    :}
+
+| P_APERTURA o:a {: RESULT = a; :} P_CIERRE
+| ENTERO:a {: RESULT = a; :}
+| DECIMAL:a {: RESULT = a; :}
+;
+
+/*****PRIMERA PARTE*******/
+encabezado ::= PACKAGE ID p importacion
+|
+;
+importacion ::= IMPORT ID sp importacion
+|
+;
+sp ::= PUNTO spp
+| pc
+;
+spp ::= MULTIPLICACION pc
+| ID sp
+;
+p ::= PUNTO ID p
+| pc
+;
+pc ::= PUNTO_COMA
+| error {::}
+;
+/*****FINAL PRIMERA PARTE****/
+/*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
+clase ::= v CLASS ID L_APERTURA atributos L_CIERRE clase
+|
+;
+internoClase ::= atributos 
+| metodo 
+;
+v ::= 
+| staticCfianl vc
+| staticCfianl
+| vc
+| vc staticCfianl
+;
+staticCfianl ::= STATIC FINAL
+|FINAL STATIC
+|FINAL
+|STATIC
+;
+vc ::= PUBLIC
+| PRIVATE
+| PROTECTED
+;
+/*FINAL PARTE DE LA CLASE*/
+/*****************ATRIBUTOS DE UNA CLASE**************/
+atributos ::= vGlobal tGlobal p atributos
+|
+;
+tGlobal ::= FINAL t  
+| t
+;
+vGlobal ::= vc vStatic
+| vStatic
+;
+vStatic ::= STATIC
+|
+;
+t ::= numEntero tFactorizacion
+| numFloat tFactorizacion
+| numDouble tFactorizacion
+| variableChar tFactorizacion
+| variableBoolean tFactorizacion
+| variableStirng tFactorizacion
+| variableObject tFactorizacion
+;
+tFactorizacion ::=  IGUAL tDatos
+;
+tDatos ::= idIgualEntero
+|DECIMAL F
+|IGUAL numEnteroDecimal
+|vChar
+|trueOfalse
+|TEXT
+| NEW ID P_APERTURA dSeguidos P_CIERRE 
+;
+dSeguidos ::= tDatos dSeguidoF
+;
+dSeguidoF ::= COMA dSeguidos
+|
+;
+/*DATOS */
+/*****************VARIABLE**************/
+numFloat ::= FLOAT ID;
+numDouble ::= DOUBLE ID;
+variableChar ::= CHAR ID;
+variableBoolean ::=BOOLEAN ID;
+variableStirng ::= STRING ID;
+variableObject ::= ID ID;
+numEntero ::= BYTE ID
+| SHORT ID
+| INT ID
+| LONG ID 
+;
+
+/*****************FINAL VARIABLE**************/
+idIgualEntero ::= ID IGUAL ENTERO;
+numEnteroDecimal ::= ENTERO
+| DECIMAL
+;
+vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
+| CHARTN
+| ENTERO
+;
+//visibilidad local
+trueOfalse ::= TRUE
+|FALSE
+;
+/*****************FINAL ATRIBUTOS DE UNA CLASE**************/
