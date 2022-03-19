@@ -45,7 +45,7 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FINAL VARIALBES PRIMITIVAS*/
 "true"              {print("true");return new Symbol(sym.TRUE,yyline,yycolumn, (yytext())); }
 "false"             {print("false");return new Symbol(sym.FALSE,yyline,yycolumn, (yytext())); }
-"f"                 {print("F");return new Symbol(sym.F,yyline,yycolumn, (yytext())); }
+{DECIMAL}"f"        {print("F");return new Symbol(sym.F,yyline,yycolumn, (yytext())); }
 "/u"{ENTERO}        {print("CHARTN");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext())); }
 /*PALABRAS RESERVADAS*/
 "package"           {return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext())); }
@@ -58,7 +58,7 @@ espacio =[\r|\t|\f|\n|\s| ]+
 "super"             {print("super");return new Symbol(sym.SUPER,yyline,yycolumn, (yytext())); }
 
 "new"               {print("new");return new Symbol(sym.NEW,yyline,yycolumn, (yytext())); }
-"void"              {return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
+"void"              {print("void");return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
 
 "try"               {print("try");return new Symbol(sym.TRY,yyline,yycolumn, (yytext())); }
 "catch"             {print("catch");return new Symbol(sym.CATCH,yyline,yycolumn, (yytext())); }
@@ -113,12 +113,12 @@ espacio =[\r|\t|\f|\n|\s| ]+
 //== , >= , <=
 /*FINAL SIMBOLOS OPERADOR RELACIONALES*/
 /*SIMBOLO DE AGRUPACION*/
-"("                 {return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
-")"                 {return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
-"{"                 {return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
-"}"                 {return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
-"["                 {return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext())); }
-"]"                 {return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext())); }
+"("                 {print("(");return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
+")"                 {print(")");return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
+"{"                 {print("{");return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
+"}"                 {print("}");return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
+"["                 {print("[");return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext())); }
+"]"                 {print("]");return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext())); }
 /*FINAL SIMBOLO DE AGRUPACION*/
 /*Token*/
 {STRING}            {print("{STRING}");return new Symbol(sym.TEXT,yyline,yycolumn, (yytext())); }

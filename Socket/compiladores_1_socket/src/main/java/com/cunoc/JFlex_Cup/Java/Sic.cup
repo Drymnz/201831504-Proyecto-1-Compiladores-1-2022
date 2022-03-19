@@ -63,7 +63,7 @@ terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 non terminal inicio;//INICIO DE TODO
 /*c , d , g ,h ,i , k , q ,r,e,w  */
 non terminal a,l;//no terminales que puede estar en varios lugares
-non terminal b,n,m,u;//no terminales sobre las varialbes
+non terminal b,n,m;//no terminales sobre las varialbes
 non terminal z,f;
 non terminal String o,j;//operaciones
 /*LA PARTE DE package Y import*/
@@ -75,7 +75,7 @@ non terminal atributos,vGlobal,t,tGlobal,vStatic,numEnteroDecimal,vChar,trueOfal
 non terminal tFactorizacion,numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
 non terminal dSeguidoF,dSeguidos,tDatos;
 /*METODOS*/
-non terminal metodo;
+non terminal metodo,u,tMetodo,pMetodoS,pMetodo,pMetodoSP;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -83,18 +83,6 @@ precedence left MULTIPLICACION, DIVISION;
 start with inicio;
 /******INICIO DE TODO *****/
 inicio ::= encabezado clase ;
-//METODO
-metodo ::= ID P_APERTURA u P_CIERRE L_APERTURA L_CIERRE 
-;
-
-
-
-
-
-
-
-
-
 
 
 
@@ -166,9 +154,10 @@ pc ::= PUNTO_COMA
 ;
 /*****FINAL PRIMERA PARTE****/
 /*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
-clase ::= v CLASS ID L_APERTURA atributos L_CIERRE clase
+clase ::= v CLASS ID L_APERTURA metodo L_CIERRE clase
 |
 ;
+
 internoClase ::= atributos 
 | metodo 
 ;
@@ -192,6 +181,7 @@ vc ::= PUBLIC
 atributos ::= vGlobal tGlobal p atributos
 |
 ;
+
 tGlobal ::= FINAL t  
 | t
 ;
@@ -212,7 +202,7 @@ t ::= numEntero tFactorizacion
 tFactorizacion ::=  IGUAL tDatos
 ;
 tDatos ::= idIgualEntero
-|DECIMAL F
+|F
 |IGUAL numEnteroDecimal
 |vChar
 |trueOfalse
@@ -252,3 +242,27 @@ trueOfalse ::= TRUE
 |FALSE
 ;
 /*****************FINAL ATRIBUTOS DE UNA CLASE**************/
+/***********************************METODOS**************/
+metodo ::= vGlobal tMetodo P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE  metodo
+|
+;
+tMetodo ::= VOID  ID
+| pMetodo
+| ID
+;
+pMetodoS ::= pMetodo pMetodoSP
+|
+;
+pMetodoSP ::= COMA pMetodoS
+| 
+;
+
+pMetodo ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| variableObject 
+| numEntero
+;
+/***********************************FINAL METODOS**************/

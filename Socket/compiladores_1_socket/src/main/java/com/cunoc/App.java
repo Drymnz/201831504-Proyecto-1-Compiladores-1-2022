@@ -11,22 +11,6 @@ import com.cunoc.JFlex_Cup.Java.Sintactico;
 
 public  class App {
     public static final int PUERTO = 7640;
-    float f = 32.32f;
-    double d = 3;
-    double de = 23.4;
-    boolean bu = false;
-    final int num;
-    
-    public App(float f, double d, double de, boolean bu, int num) {
-        this.f = f;
-        this.d = d;
-        this.de = de;
-        this.bu = bu;
-        this.num = num;
-    }
-
-    protected static final String varialbeStringStaticFinal = "158";
-    public final double variablepublicFinal = 20.1;
 
     public static void main(String[] args) {
         /*
@@ -65,6 +49,9 @@ public  class App {
         /*
          * FIN DE PRUEVAS
          */
+    }
+    public static final int me(){
+        return 0;
     }
 
 
