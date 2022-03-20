@@ -61,9 +61,9 @@ non terminal encabezado,importacion,p,sp,spp,pc;
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O ATRIBUTOS DE LA CALSE*/
-non terminal atributos,vGlobal,t,numEnteroDecimal,vChar,trueOfalse;
+non terminal atributos,vGlobal,numEnteroDecimal,vChar,trueOfalse;
 non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
-non terminal dSeguidoF,dSeguidos,tDatos,variableID,objectInst,vGlobalFac;
+non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
@@ -105,10 +105,6 @@ idDato ::= PUNTO idDatoFac
 ;
 idDatoFac ::= ID  idDato
 ; 
-
-
-
-
 /*OPERACION NUMERICA*/
 j ::= o {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
 ;
@@ -181,27 +177,17 @@ vGlobalFac ::= staticCfianl
 ;
 /*FINAL PARTE DE LA CLASE*/
 /*****************ATRIBUTOS DE UNA CLASE**************/
-atributos ::=  IGUAL t p
+atributos ::=  IGUAL tDatos p
 |p
 ;
-
-
-
-
-
 tFact ::= dSeguidoF P_CIERRE 
 | P_CIERRE 
 ;
-
 dSeguidoF ::= tDatos objectInst
 ;
 objectInst ::= COMA dSeguidoF
 |
 ;
-
-
-t ::=  tDatos ;
-
 tDatos ::= numEnteroDecimal
 |vChar
 |trueOfalse
@@ -216,14 +202,6 @@ lCon ::= tDatos lConFact L_CIERRE
 lConFact ::=  COMA tDatos  lConFact
 |
 ;
-
-
-
-
-
-
-
-
 /*DATOS INGRESADOS*/
 textoIngresoado ::= s; 
 numEnteroDecimal ::= j;
