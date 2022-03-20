@@ -13,19 +13,11 @@ import java_cup.runtime.*;
         System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
         System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
         }
-/*
-        public void unrecovered_syntax_error(Symbol cur_token) {
+        /*public void unrecovered_syntax_error(Symbol cur_token) {
             if (cur_token.sym == sym.EOF) {
              System.out.println("public void unrecoveredsyntax_error!!!!!!!!!!!!!!");
             }
         }*/
-    /**
-     * ***CODE*******
-     */
-   
-    /**
-     * ***END CODE*******
-     */
 :}
 /*************************************TERMINALES******************************************************/
 /*************VARIABLES PRIMITIVAS***************/
@@ -63,6 +55,7 @@ terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 non terminal inicio;//INICIO DE TODO
 /*c , d , g ,h ,i , k , q ,r,e,w,z,f,u,s,b,n,m,a,l  */
 non terminal String o,j;//operaciones
+non terminal String s;//operaciones
 /*LA PARTE DE package Y import*/
 non terminal encabezado,importacion,p,sp,spp,pc;
 /*LA CLASE*/
@@ -73,6 +66,9 @@ non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variab
 non terminal dSeguidoF,dSeguidos,tDatos,variableID,objectInst,vGlobalFac;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
+non terminal onlyIDArray,staticFactori,finalFactori;
+/*LOCAL METODO*/
+non terminal localMetodo,os,idDatoFac , idDato;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -81,63 +77,68 @@ start with inicio;
 /******INICIO DE TODO *****/
 inicio ::= encabezado clase;
 /******operaciones matematicas*****/
+localMetodo ::= variableID atributos {:System.out.println("********PRIMERA VARIABLE********");:} localMetodo
+|
+;
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*OPERACION String*/
+s ::= os;
+os::= os SUMA os {::}
+| P_APERTURA os P_CIERRE
+| TEXT//"TEXT"
+| ID idDato
+;
+idDato ::= PUNTO idDatoFac
+|
+;
+idDatoFac ::= ID  idDato
+; 
+
+
+
+
+/*OPERACION NUMERICA*/
 j ::= o {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
-| error {::}
 ;
-o ::= o:a SUMA o:b {: 
-                    double numeroUno= Double.valueOf(a);
-                    double numeroDos= Double.valueOf(b);
-                    double resultado = numeroUno-numeroDos;
-                    RESULT = String.valueOf(resultado);
-// listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("SUMAR", aleft, aright, numeroUno+"+"+numeroDos));
-                    :}
-
-|  o:a RESTA o:b {:
-                double numeroUno= Double.valueOf(a);
-                double numeroDos= Double.valueOf(b);
-                double resultado = numeroUno-numeroDos;
-                RESULT = String.valueOf(resultado);
-// listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("RESTAR", aleft, aright, numeroUno+"-"+numeroDos));
-                    :}
-
-|  o:a DIVISION o:b {:
-                    double numeroUno= Double.valueOf(a);
-                    double numeroDos= Double.valueOf(b);
-                    double resultado = numeroUno/numeroDos;
-                    RESULT = String.valueOf(resultado);
-//listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("DIVIDIR", aleft, aright, numeroUno+"/"+numeroDos));
-                    :}
-
-|  o:a MULTIPLICACION o:b {:
-                    double numeroUno= Double.valueOf(a);
-                    double numeroDos= Double.valueOf(b);
-                    double resultado = numeroUno*numeroDos;
-                    RESULT = String.valueOf(resultado);
-//listadoReportesMatemtaicos.add(new ReportesOperadoresMatematicos("MULTIPLICAR", aleft, aright, numeroUno+"*"+numeroDos));
-                    :}
-
-| P_APERTURA o:a {: RESULT = a; :} P_CIERRE
-| ENTERO:a {: RESULT = a; :}
-| DECIMAL:a {: RESULT = a; :}
+o ::= o SUMA o {::}
+|  o RESTA o {::}
+|  o DIVISION o
+|  o MULTIPLICACION o
+| P_APERTURA o P_CIERRE
+| ENTERO
+| DECIMAL
 ;
-
 /*****PRIMERA PARTE*******/
-encabezado ::= PACKAGE ID p importacion
+encabezado ::= PACKAGE ID pc importacion
 |
 ;
 importacion ::= IMPORT ID sp importacion
 |
 ;
 sp ::= PUNTO spp
-| pc
+| p
 ;
-spp ::= MULTIPLICACION pc
+spp ::= MULTIPLICACION p
 | ID sp
 ;
-p ::= PUNTO ID p
-| pc
+
+pc ::= PUNTO ID pc
+| p
 ;
-pc ::= PUNTO_COMA
+
+p ::= PUNTO_COMA
 | error {::}
 ;
 /*****FINAL PRIMERA PARTE****/
@@ -148,16 +149,20 @@ v ::=
 | vc
 | vc staticCfianl
 ;
-staticCfianl ::= STATIC FINAL
-|FINAL STATIC
-|FINAL
-|STATIC
+staticCfianl ::= STATIC staticFactori
+|FINAL finalFactori
+;
+staticFactori ::= FINAL
+|
+;
+finalFactori ::= STATIC
+|
 ;
 vc ::= PUBLIC
 | PRIVATE
 | PROTECTED
 ;
-clase ::= v CLASS ID L_APERTURA internoClase L_CIERRE
+clase ::= v CLASS ID L_APERTURA {:System.out.println("****INICIO CLASES");:} internoClase {:System.out.println("****FINAL CLASES");:} L_CIERRE
 ;
 internoClase ::= vGlobal internoClaseFa
 | 
@@ -165,10 +170,10 @@ internoClase ::= vGlobal internoClaseFa
 internoClaseFa ::= variableID ayuda
 |ayuda
 ;
-ayuda ::= atributos  internoClase
+ayuda ::= atributos {:System.out.println("FINAL ATRIBUTO");:} internoClase
 | metodo internoClase
 ;
-vGlobal ::= vc vGlobalFac
+vGlobal ::= vc vGlobalFac 
 | vGlobalFac
 ;
 vGlobalFac ::= staticCfianl
@@ -179,12 +184,11 @@ vGlobalFac ::= staticCfianl
 atributos ::=  IGUAL t p
 |p
 ;
-t ::=  tDatos
-|  NEW ID P_APERTURA  objectInst
+
+objectInst ::= dSeguidos P_CIERRE dSeguidoF 
+| P_CIERRE 
 ;
-objectInst ::= dSeguidos P_CIERRE
-| P_CIERRE
-;
+
 dSeguidos ::= tDatos dSeguidoF
 ;
 dSeguidoF ::= COMA dSeguidos
@@ -200,26 +204,33 @@ variableID ::= numFloat
 | variableObject 
 | numEntero 
 ;
-numFloat ::= FLOAT ID;
-numDouble ::= DOUBLE ID;
-variableChar ::= CHAR ID;
-variableBoolean ::=BOOLEAN ID;
-variableStirng ::= STRING ID;
-variableObject ::= ID ID;
-numEntero ::= BYTE ID
-| SHORT ID
-| INT ID
-| LONG ID 
+numFloat ::= FLOAT onlyIDArray;
+numDouble ::= DOUBLE onlyIDArray;
+variableChar ::= CHAR onlyIDArray;
+variableBoolean ::=BOOLEAN onlyIDArray;
+variableStirng ::= STRING onlyIDArray;
+variableObject ::= ID onlyIDArray;
+numEntero ::= BYTE onlyIDArray
+| SHORT onlyIDArray
+| INT onlyIDArray
+| LONG onlyIDArray 
 ;
+onlyIDArray ::= ID 
+| C_APERTURA C_CIERRE onlyIDArray
+;
+
 /*****************FINAL VARIABLE**************/
+t ::=  tDatos 
+|  NEW ID P_APERTURA  objectInst 
+;
 tDatos ::= numEnteroDecimal
 |vChar
 |trueOfalse
-|TEXT
+|s
 |F
+| L_APERTURA t L_CIERRE
 ;
-numEnteroDecimal ::= ENTERO
-| DECIMAL
+numEnteroDecimal ::= j
 ;
 vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
 | CHARTN
@@ -229,9 +240,9 @@ trueOfalse ::= TRUE
 ;
 /*****************FINAL ATRIBUTOS DE UNA CLASE**************/
 /***********************************METODOS**************/
-metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE 
-|VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE
-|ID P_APERTURA pMetodoS P_CIERRE L_APERTURA L_CIERRE
+metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo {:System.out.println("****FINAL METODO");:} L_CIERRE 
+|VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
+|ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
 ;
 pMetodoS ::= variableID pMetodoSP
 |

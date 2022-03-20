@@ -58,7 +58,7 @@ espacio =[\r|\t|\f|\n|\s| ]+
 "super"             {print("super");return new Symbol(sym.SUPER,yyline,yycolumn, (yytext())); }
 
 "new"               {print("new");return new Symbol(sym.NEW,yyline,yycolumn, (yytext())); }
-"void"              {print("void");return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
+"void"              {return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
 
 "try"               {print("try");return new Symbol(sym.TRY,yyline,yycolumn, (yytext())); }
 "catch"             {print("catch");return new Symbol(sym.CATCH,yyline,yycolumn, (yytext())); }
@@ -79,11 +79,11 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FIN FINAL SENTENCIAS DE CONTORL*/
 /*FINAL PALABRAS RESERVADAS*/
 /*VISIBILIDA*/
-"private"           {print("private");return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext())); }
-"public"            {print("public");return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext())); }
-"protected"         {print("protected");return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext())); }
+"private"           {return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext())); }
+"public"            {return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext())); }
+"protected"         {return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext())); }
 "final"             {print("final");return new Symbol(sym.FINAL,yyline,yycolumn, (yytext())); }
-"static"            {print("static");return new Symbol(sym.STATIC,yyline,yycolumn, (yytext())); }
+"static"            {return new Symbol(sym.STATIC,yyline,yycolumn, (yytext())); }
 /*FIN VISIBILIDA*/
 /*SIMBOLOS DE PUNTUACION*/
 "'"                 {print("'");return new Symbol(sym.SIMPLE_COMILLA,yyline,yycolumn, (yytext())); }
@@ -113,10 +113,10 @@ espacio =[\r|\t|\f|\n|\s| ]+
 //== , >= , <=
 /*FINAL SIMBOLOS OPERADOR RELACIONALES*/
 /*SIMBOLO DE AGRUPACION*/
-"("                 {return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
-")"                 {return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
-"{"                 {return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
-"}"                 {return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
+"("                 {print("(");return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext())); }
+")"                 {print(")");return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext())); }
+"{"                 {print("{");return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext())); }
+"}"                 {print("}");return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext())); }
 "["                 {print("[");return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext())); }
 "]"                 {print("]");return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext())); }
 /*FINAL SIMBOLO DE AGRUPACION*/

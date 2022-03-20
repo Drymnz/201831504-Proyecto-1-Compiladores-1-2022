@@ -10,7 +10,7 @@ import com.cunoc.JFlex_Cup.Java.Lexico;
 import com.cunoc.JFlex_Cup.Java.Sintactico;
 
 public  class App {
-    public static final int PUERTO = 7640;
+    public static final int PUERTO = (((1581)));
     public static void main(String[] args) {
         /*
          * PRUEVAS PARA VER LO SIMPLE
@@ -50,10 +50,4 @@ public  class App {
          */
     }  
 
-
-/*    static int pu = 32;
-    static void p(){}
-    public static void p (){}
-    public static final int enter = 15;
-    public static final void ew(){}*/
 }
