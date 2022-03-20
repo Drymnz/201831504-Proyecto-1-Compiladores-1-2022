@@ -68,7 +68,7 @@ non terminal dSeguidoF,dSeguidos,tDatos,variableID,objectInst,vGlobalFac;
 non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
 /*LOCAL METODO*/
-non terminal localMetodo,os,idDatoFac , idDato;
+non terminal localMetodo,os,idDatoFac ,tFact,lCon, idDato,textoIngresoado,lConFact;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -185,15 +185,55 @@ atributos ::=  IGUAL t p
 |p
 ;
 
-objectInst ::= dSeguidos P_CIERRE dSeguidoF 
+
+
+
+
+tFact ::= dSeguidoF P_CIERRE 
 | P_CIERRE 
 ;
 
-dSeguidos ::= tDatos dSeguidoF
+dSeguidoF ::= tDatos objectInst
 ;
-dSeguidoF ::= COMA dSeguidos
+objectInst ::= COMA dSeguidoF
 |
 ;
+
+
+t ::=  tDatos ;
+
+tDatos ::= numEnteroDecimal
+|vChar
+|trueOfalse
+|textoIngresoado
+|F
+|L_APERTURA lCon
+|NEW ID P_APERTURA  tFact
+;
+lCon ::= tDatos lConFact L_CIERRE
+| L_CIERRE
+;
+lConFact ::=  COMA tDatos  lConFact
+|
+;
+
+
+
+
+
+
+
+
+/*DATOS INGRESADOS*/
+textoIngresoado ::= s; 
+numEnteroDecimal ::= j;
+vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
+| CHARTN
+;
+trueOfalse ::= TRUE
+|FALSE
+;
+/*DATOS INGRESADOS*/
 /*DATOS */
 /*****************VARIABLE**************/
 variableID ::= numFloat 
@@ -220,24 +260,6 @@ onlyIDArray ::= ID
 ;
 
 /*****************FINAL VARIABLE**************/
-t ::=  tDatos 
-|  NEW ID P_APERTURA  objectInst 
-;
-tDatos ::= numEnteroDecimal
-|vChar
-|trueOfalse
-|s
-|F
-| L_APERTURA t L_CIERRE
-;
-numEnteroDecimal ::= j
-;
-vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
-| CHARTN
-;
-trueOfalse ::= TRUE
-|FALSE
-;
 /*****************FINAL ATRIBUTOS DE UNA CLASE**************/
 /***********************************METODOS**************/
 metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo {:System.out.println("****FINAL METODO");:} L_CIERRE 

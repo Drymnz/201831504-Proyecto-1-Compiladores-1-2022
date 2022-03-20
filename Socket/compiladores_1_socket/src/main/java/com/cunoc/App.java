@@ -11,6 +11,7 @@ import com.cunoc.JFlex_Cup.Java.Sintactico;
 
 public  class App {
     public static final int PUERTO = (((1581)));
+    String[] list = {"text","text"};
     public static void main(String[] args) {
         /*
          * PRUEVAS PARA VER LO SIMPLE
