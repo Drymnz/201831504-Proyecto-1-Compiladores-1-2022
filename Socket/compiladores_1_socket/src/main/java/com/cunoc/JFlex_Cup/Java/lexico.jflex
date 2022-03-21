@@ -75,6 +75,7 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FIN SENTENCIAS DE CONTORL*/
 /*FINAL SENTENCIAS DE CONTORL*/
 "break"             {print("break");return new Symbol(sym.BREAK,yyline,yycolumn, (yytext())); }
+"default"           {print("default");return new Symbol(sym.DEFAULT,yyline,yycolumn, (yytext())); }
 "return"            {print("return");return new Symbol(sym.RETURN,yyline,yycolumn, (yytext())); }
 /*FIN FINAL SENTENCIAS DE CONTORL*/
 /*FINAL PALABRAS RESERVADAS*/

@@ -34,6 +34,18 @@ public  class App {
         // convertidr ese archivo en texto
         String text = (new FileConverter()).upLoadTextFile(fileTest);
         // ANALISAR
+        int i = 3;
+        switch (i) {
+            case 1*1:
+                
+                break;
+        
+            default:
+                break;
+        }
+        for (int j = 0; j < args.length;) {
+            
+        }
         Reader reader = new StringReader(text);
         Lexico lexema = new Lexico(reader);
         Sintactico sic = new Sintactico(lexema);

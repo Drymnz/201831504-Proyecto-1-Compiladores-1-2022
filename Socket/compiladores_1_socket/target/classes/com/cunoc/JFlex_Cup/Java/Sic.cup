@@ -36,7 +36,7 @@ terminal NEW,VOID;
 /*TRY CATCH*/
 terminal TRY,CATCH;
 /*SENTENCIAS DE CONTORL*/
-terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE;
+terminal FOR,WHILE,DO,IF,ELSE,SWITCH,CASE,DEFAULT;
 /*FINAL SENTENCIAS DE CONTORL*/ 
 terminal BREAK,RETURN;
 /*VISIBILIDA*/ 
@@ -87,7 +87,22 @@ localMetodo ::= local localMetodo
 local ::= variableLocal
 |sentenciaControl
 ;
-sentenciaControl ::= WHILE;
+ // ELSE,CASE;
+sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA variableLocal trueOfalse p ID SUMA SUMA P_CIERRE L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA variableLocal trueOfalse p ID RESTA RESTA P_CIERRE L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA variableLocal trueOfalse p  L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA variableLocal trueOfalse p /*CUALQUIER ACCION menos colocar otra sentencia ya no es ;*/ L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA ID ID DOBLE_PUNTO ID P_CIERRE L_APERTURA localMetodo L_CIERRE
+|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA trueOfalse P_CIERRE p
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE ELSE  L_APERTURA localMetodo L_CIERRE
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE ELSE  IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
+|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+|SWITCH P_APERTURA ID P_CIERRE
+;
 
 
 
