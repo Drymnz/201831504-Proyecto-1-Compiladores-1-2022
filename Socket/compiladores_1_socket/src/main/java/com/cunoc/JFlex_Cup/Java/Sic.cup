@@ -54,21 +54,24 @@ terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 /*************************************NO TERMINALES******************************************************/
 non terminal inicio;//INICIO DE TODO
 /*c , d , g ,h ,i , k , q ,r,e,w,z,f,u,s,b,n,m,a,l  */
-non terminal String o,j;//operaciones
+non terminal String operaionNumerica,j;//operaciones
 non terminal String s;//operaciones
 /*LA PARTE DE package Y import*/
 non terminal encabezado,importacion,p,sp,spp,pc;
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
-/*VARIABLE GLOBAL O ATRIBUTOS DE LA CALSE*/
-non terminal atributos,vGlobal,numEnteroDecimal,vChar,trueOfalse;
+/*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
+non terminal asignacionVariable,vGlobal,numEnteroDecimal,vChar,trueOfalse;
 non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
 non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
+non terminal os,idDatoFac ,tFact,lCon, idDato,textoIngresoado;
 /*LOCAL METODO*/
-non terminal localMetodo,os,idDatoFac ,tFact,lCon, idDato,textoIngresoado,lConFact;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,pedirID,variableObjectUsarCrear,variableIDLocal,variableSet,setVariable,pedirIDFacto;
+/*SENTENCIAS DE CONTROLS*/
+non terminal sentenciaControl;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -77,9 +80,26 @@ start with inicio;
 /******INICIO DE TODO *****/
 inicio ::= encabezado clase;
 /******operaciones matematicas*****/
-localMetodo ::= variableID atributos {:System.out.println("********PRIMERA VARIABLE********");:} localMetodo
+localMetodo ::= local localMetodo
 |
 ;
+
+local ::= variableLocal
+|sentenciaControl
+;
+sentenciaControl ::= WHILE;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -97,8 +117,7 @@ localMetodo ::= variableID atributos {:System.out.println("********PRIMERA VARIA
 s ::= os;
 os::= os SUMA os {::}
 | P_APERTURA os P_CIERRE
-| TEXT//"TEXT"
-| ID idDato
+/*/*************************************************/
 ;
 idDato ::= PUNTO idDatoFac
 |
@@ -106,15 +125,17 @@ idDato ::= PUNTO idDatoFac
 idDatoFac ::= ID  idDato
 ; 
 /*OPERACION NUMERICA*/
-j ::= o {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
+j ::= operaionNumerica {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
 ;
-o ::= o SUMA o {::}
-|  o RESTA o {::}
-|  o DIVISION o
-|  o MULTIPLICACION o
-| P_APERTURA o P_CIERRE
+operaionNumerica ::= operaionNumerica SUMA operaionNumerica {::}
+|  operaionNumerica RESTA operaionNumerica {::}
+|  operaionNumerica DIVISION operaionNumerica
+|  operaionNumerica MULTIPLICACION operaionNumerica
+| P_APERTURA operaionNumerica P_CIERRE
 | ENTERO
 | DECIMAL
+| TEXT//"TEXT"
+| ID idDato
 ;
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
@@ -166,7 +187,7 @@ internoClase ::= vGlobal internoClaseFa
 internoClaseFa ::= variableID ayuda
 |ayuda
 ;
-ayuda ::= atributos {:System.out.println("FINAL ATRIBUTO");:} internoClase
+ayuda ::= asignacionVariable internoClase
 | metodo internoClase
 ;
 vGlobal ::= vc vGlobalFac 
@@ -176,17 +197,9 @@ vGlobalFac ::= staticCfianl
 | 
 ;
 /*FINAL PARTE DE LA CLASE*/
-/*****************ATRIBUTOS DE UNA CLASE**************/
-atributos ::=  IGUAL tDatos p
+/*****************asignacionVariable DE UNA CLASE**************/
+asignacionVariable ::=  IGUAL tDatos p
 |p
-;
-tFact ::= dSeguidoF P_CIERRE 
-| P_CIERRE 
-;
-dSeguidoF ::= tDatos objectInst
-;
-objectInst ::= COMA dSeguidoF
-|
 ;
 tDatos ::= numEnteroDecimal
 |vChar
@@ -195,6 +208,14 @@ tDatos ::= numEnteroDecimal
 |F
 |L_APERTURA lCon
 |NEW ID P_APERTURA  tFact
+;
+tFact ::= dSeguidoF P_CIERRE 
+| P_CIERRE 
+;
+dSeguidoF ::= tDatos objectInst
+;
+objectInst ::= COMA dSeguidoF
+|
 ;
 lCon ::= tDatos lConFact L_CIERRE
 | L_CIERRE
@@ -238,11 +259,11 @@ onlyIDArray ::= ID
 ;
 
 /*****************FINAL VARIABLE**************/
-/*****************FINAL ATRIBUTOS DE UNA CLASE**************/
+/*****************FINAL asignacionVariable DE UNA CLASE**************/
 /***********************************METODOS**************/
-metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo {:System.out.println("****FINAL METODO");:} L_CIERRE 
-|VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
-|ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("****INICIO METODO");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
+metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo {:System.out.println("****FINAL METODO");:} L_CIERRE 
+|VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
+|ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
 ;
 pMetodoS ::= variableID pMetodoSP
 |
@@ -251,3 +272,26 @@ pMetodoSP ::= COMA pMetodoS
 | 
 ;
 /***********************************FINAL METODOS**************/
+/*VARIALBES LOCALES DENTRO DE UN METODO*/
+variableLocal ::= variableIDLocal asignacionVariable
+| RETURN variableLocal
+| BREAK p
+;
+variableIDLocal ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng  
+| numEntero 
+| ID loclaMetodFacto
+;
+loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear
+|
+;
+variableObjectUsarCrear ::= P_APERTURA variableSet
+|loclaMetodFacto
+;
+variableSet ::= tDatos P_CIERRE
+|P_CIERRE
+;
+/*VARIALBES LOCALES DENTRO DE UN METODO*/

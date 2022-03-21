@@ -4,10 +4,6 @@ public class TESTJAVA {
     public static Animal[] listBot = {new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null)};
     public static void main(String[] args) {
         Mosquito.comer(comida1);
-        Mosquito.comer(comida1);
-        Mosquito.comer(comida1);
-        Mosquito.comer(comida1);
-        Mosquito.comer(comida1);
         int select = listMio.length - 1;
         int selectBot = listMio.length - 1;
         while (select >= 0 && selectBot >= 0) {
