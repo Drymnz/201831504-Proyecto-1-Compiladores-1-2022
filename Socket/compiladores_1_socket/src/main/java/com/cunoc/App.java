@@ -34,7 +34,8 @@ public  class App {
         // convertidr ese archivo en texto
         String text = (new FileConverter()).upLoadTextFile(fileTest);
         // ANALISAR
-        int i = 3;
+        String d  = 3+ "3";
+        int i =43;
         switch (i) {
             case 1*1:
                 
@@ -43,7 +44,16 @@ public  class App {
             default:
                 break;
         }
-        for (int j = 0; j < args.length;) {
+        boolean sdf = (32!=(43+1));
+        if (sdf) {
+            
+        } else if (!sdf){
+            
+        }else{
+
+        }
+        int j =0;
+        for ( Reader readser = new StringReader(text); j < args.length;j++) {
             
         }
         Reader reader = new StringReader(text);

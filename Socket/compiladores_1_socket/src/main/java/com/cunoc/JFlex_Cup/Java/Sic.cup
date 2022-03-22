@@ -23,7 +23,7 @@ import java_cup.runtime.*;
 /*************VARIABLES PRIMITIVAS***************/
 terminal BYTE,SHORT,INT,LONG,FLOAT,F,DOUBLE;//num
 terminal CHAR,CARACTER,CHARTN;//CARACTER
-terminal BOOLEAN,TRUE,FALSE;//boolean
+terminal BOOLEAN,TRUE,FALSE,ADMIRACION,INTERO;//boolean
 /*ENCABEZADO*/
 terminal PACKAGE,IMPORT;
 /*************PUNTUACION***************/
@@ -69,12 +69,16 @@ non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
 non terminal os,idDatoFac ,tFact,lCon, idDato,textoIngresoado;
 /*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,pedirID,variableObjectUsarCrear,variableIDLocal,variableSet,setVariable,pedirIDFacto;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,variableObjectUsarCrear,variableIDLocal,variableSet;
 /*SENTENCIAS DE CONTROLS*/
-non terminal sentenciaControl;
+non terminal sentenciaControl,accionMetodo;
+non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
+non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,cierreParentesis;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
+precedence left IGUAL,MAYOR_Q,MENOR_Q, Y;
+precedence left IGUAL,MAYOR_Q,MENOR_Q, O;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
@@ -89,19 +93,45 @@ local ::= variableLocal
 ;
  // ELSE,CASE;
 sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA variableLocal trueOfalse p ID SUMA SUMA P_CIERRE L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA variableLocal trueOfalse p ID RESTA RESTA P_CIERRE L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA variableLocal trueOfalse p  L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA variableLocal trueOfalse p /*CUALQUIER ACCION menos colocar otra sentencia ya no es ;*/ L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA ID ID DOBLE_PUNTO ID P_CIERRE L_APERTURA localMetodo L_CIERRE
+|FOR P_APERTURA variableIDFor  sentenciaFor
 |DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA trueOfalse P_CIERRE p
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE ELSE  L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE ELSE  IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
-|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-|SWITCH P_APERTURA ID P_CIERRE
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA ID P_CIERRE
+;
+sentenciaElse ::= ELSE  sentenciaElseFac
+|
+;
+sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+;
+
+
+
+
+
+
+sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
+| trueOfalse p accionMetodo  P_CIERRE L_APERTURA localMetodo L_CIERRE
+;
+
+inializarVariable ::= variableIDFor asignacionVariable
+| ID forVariableId
+;  
+variableIDFor ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| numEntero 
+;
+forVariableId ::= ID forVariableIdFac
+| C_APERTURA C_CIERRE forVariableId
+;
+forVariableIdFac ::= DOBLE_PUNTO ID
+| asignacionVariable
 ;
 
 
@@ -110,6 +140,13 @@ sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo
 
 
 
+
+
+
+/*CUALQUIER ACCION menos colocar otra sentencia ya no es ;*/
+accionMetodo ::= ID SUMA SUMA
+|ID RESTA RESTA
+;
 
 
 
@@ -139,19 +176,7 @@ idDato ::= PUNTO idDatoFac
 ;
 idDatoFac ::= ID  idDato
 ; 
-/*OPERACION NUMERICA*/
-j ::= operaionNumerica {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
-;
-operaionNumerica ::= operaionNumerica SUMA operaionNumerica {::}
-|  operaionNumerica RESTA operaionNumerica {::}
-|  operaionNumerica DIVISION operaionNumerica
-|  operaionNumerica MULTIPLICACION operaionNumerica
-| P_APERTURA operaionNumerica P_CIERRE
-| ENTERO
-| DECIMAL
-| TEXT//"TEXT"
-| ID idDato
-;
+
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
 |
@@ -244,10 +269,42 @@ numEnteroDecimal ::= j;
 vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
 | CHARTN
 ;
-trueOfalse ::= TRUE
-|FALSE
+trueOfalse ::= operarBoolean
 ;
+
 /*DATOS INGRESADOS*/
+operarBoolean ::= operarBoolean IGUAL IGUAL operarBoolean 
+|operarBoolean MAYOR_Q opBooleanIGUALFac
+|operarBoolean MENOR_Q opBooleanIGUALFac
+|operarBoolean Y operarBoolean
+|operarBoolean O operarBoolean
+|FALSE
+|TRUE
+|ADMIRACION operarBoolean
+|j
+|C_APERTURA j C_CIERRE
+;
+
+opBooleanIGUALFac ::=  operarBoolean
+| IGUAL operarBoolean
+;
+/*OPERACION NUMERICA*/
+j ::= operaionNumerica {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
+;
+operaionNumerica ::= operaionNumerica SUMA operaionNumerica {::}
+|  operaionNumerica RESTA operaionNumerica {::}
+|  operaionNumerica DIVISION operaionNumerica
+|  operaionNumerica MULTIPLICACION operaionNumerica
+| P_APERTURA cierreParentesis
+| ENTERO
+| DECIMAL
+| TEXT//"TEXT"
+| ID idDato
+;
+cierreParentesis ::= operaionNumerica P_CIERRE
+|operarBoolean P_CIERRE
+;
+
 /*DATOS */
 /*****************VARIABLE**************/
 variableID ::= numFloat 
@@ -272,7 +329,6 @@ numEntero ::= BYTE onlyIDArray
 onlyIDArray ::= ID 
 | C_APERTURA C_CIERRE onlyIDArray
 ;
-
 /*****************FINAL VARIABLE**************/
 /*****************FINAL asignacionVariable DE UNA CLASE**************/
 /***********************************METODOS**************/

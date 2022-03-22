@@ -104,6 +104,8 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FINAL SIMBOLOS ARITMETRICOS*/
 /*SIMBOLOS OPERADOR*/
 "="                 {print("IGUAL");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext())); }
+"!"                 {print("!");return new Symbol(sym.ADMIRACION,yyline,yycolumn, (yytext())); }
+"?"                 {print("?");return new Symbol(sym.INTERO,yyline,yycolumn, (yytext())); }
 //+= , -= , *= , /= , %=
 /*FINAL SIMBOLOS OPERADOR*/
 /*SIMBOLOS OPERADOR RELACIONALES*/
