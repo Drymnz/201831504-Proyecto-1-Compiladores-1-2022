@@ -2,6 +2,11 @@ public class TESTJAVA {
     public static BufFood comida1 = new BufFood("MANZANA", 1, 2);
     public static Animal[] listMio = {new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new MascotaNo("Hormiga", "Compañerismo", 1, 2, ListAnimal.Insecto, ListAnimal.Terrestre), new MascotaNo("Hormiga", "Compañerismo", 1, 2, ListAnimal.Insecto, ListAnimal.Terrestre)};
     public static Animal[] listBot = {new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null)};
+    public int valor= comida1.getLife();
+    public int contadorFinal = listBot.length;
+    public boolean primerBoolean = (32<0);
+    public boolean segundoBoolean = primerBoolean;
+    public boolean tercerBoolean ;
     public static void main(String[] args) {
         Mosquito.comer(comida1);
         int select = listMio.length - 1;

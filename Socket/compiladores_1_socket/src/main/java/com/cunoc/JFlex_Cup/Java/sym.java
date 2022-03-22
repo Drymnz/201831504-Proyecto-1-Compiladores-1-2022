@@ -12,7 +12,6 @@ public class sym {
   public static final int SHORT = 3;
   public static final int Y = 61;
   public static final int DOBLE_PUNTO = 22;
-  public static final int operarBoolean = 16;
   public static final int CHAR = 9;
   public static final int L_CIERRE = 66;
   public static final int EXNTENDS = 26;
@@ -23,6 +22,7 @@ public class sym {
   public static final int DOUBLE = 8;
   public static final int PRIVATE = 43;
   public static final int INT = 4;
+  public static final int INTERO = 16;
   public static final int FOR = 33;
   public static final int F = 7;
   public static final int STATIC = 47;
@@ -94,7 +94,7 @@ public class sym {
   "TRUE",
   "FALSE",
   "ADMIRACION",
-  "operarBoolean",
+  "INTERO",
   "PACKAGE",
   "IMPORT",
   "PUNTO",

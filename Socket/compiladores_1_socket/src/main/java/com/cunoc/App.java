@@ -11,7 +11,6 @@ import com.cunoc.JFlex_Cup.Java.Sintactico;
 
 public  class App {
     public static final int PUERTO = (((1581)));
-    String list = "text"+"text";
     public static void main(String[] args) {
         /*
          * PRUEVAS PARA VER LO SIMPLE
@@ -34,28 +33,6 @@ public  class App {
         // convertidr ese archivo en texto
         String text = (new FileConverter()).upLoadTextFile(fileTest);
         // ANALISAR
-        String d  = 3+ "3";
-        int i =43;
-        switch (i) {
-            case 1*1:
-                
-                break;
-        
-            default:
-                break;
-        }
-        boolean sdf = (32!=(43+1));
-        if (sdf) {
-            
-        } else if (!sdf){
-            
-        }else{
-
-        }
-        int j =0;
-        for ( Reader readser = new StringReader(text); j < args.length;j++) {
-            
-        }
         Reader reader = new StringReader(text);
         Lexico lexema = new Lexico(reader);
         Sintactico sic = new Sintactico(lexema);

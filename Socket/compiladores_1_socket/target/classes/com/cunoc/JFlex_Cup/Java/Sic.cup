@@ -1,14 +1,10 @@
 /*************************************CODE******************************************************/
 package com.cunoc.JFlex_Cup.Java;
-
 import java_cup.runtime.*;
-
     parser code {:
-        
         Sintactico(Lexico lexico){
             super(lexico);
         }
-
         public void syntax_error(Symbol cur_token) {
         System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
         System.out.println(String.format("En la posicion: %d, %d", cur_token.left, cur_token.right));
@@ -55,25 +51,25 @@ terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 non terminal inicio;//INICIO DE TODO
 /*c , d , g ,h ,i , k , q ,r,e,w,z,f,u,s,b,n,m,a,l  */
 non terminal String operaionNumerica,j;//operaciones
-non terminal String s;//operaciones
 /*LA PARTE DE package Y import*/
-non terminal encabezado,importacion,p,sp,spp,pc;
+non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoVC;
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
 non terminal asignacionVariable,vGlobal,numEnteroDecimal,vChar,trueOfalse;
 non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
-non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac;
+non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDataP,operadores;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
-non terminal os,idDatoFac ,tFact,lCon, idDato,textoIngresoado;
+non terminal idDatoFac ,tFact,lCon, idDato;
 /*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,variableObjectUsarCrear,variableIDLocal,variableSet;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,operarText,terminalAccion;
+non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,idGet,variableLocalFinal;
 /*SENTENCIAS DE CONTROLS*/
-non terminal sentenciaControl,accionMetodo;
+non terminal sentenciaControl,usarVariable,restarIgual,sumarIgual,usarVariableFacto;
 non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,cierreParentesis;
+non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -83,132 +79,47 @@ precedence left IGUAL,MAYOR_Q,MENOR_Q, O;
 start with inicio;
 /******INICIO DE TODO *****/
 inicio ::= encabezado clase;
-/******operaciones matematicas*****/
-localMetodo ::= local localMetodo
-|
-;
-
-local ::= variableLocal
-|sentenciaControl
-;
- // ELSE,CASE;
-sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
-|FOR P_APERTURA variableIDFor  sentenciaFor
-|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA trueOfalse P_CIERRE p
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA ID P_CIERRE
-;
-sentenciaElse ::= ELSE  sentenciaElseFac
-|
-;
-sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
-;
-
-
-
-
-
-
-sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
-| trueOfalse p accionMetodo  P_CIERRE L_APERTURA localMetodo L_CIERRE
-;
-
-inializarVariable ::= variableIDFor asignacionVariable
-| ID forVariableId
-;  
-variableIDFor ::= numFloat 
-| numDouble 
-| variableChar 
-| variableBoolean 
-| variableStirng 
-| numEntero 
-;
-forVariableId ::= ID forVariableIdFac
-| C_APERTURA C_CIERRE forVariableId
-;
-forVariableIdFac ::= DOBLE_PUNTO ID
-| asignacionVariable
-;
-
-
-
-
-
-
-
-
-
-
-/*CUALQUIER ACCION menos colocar otra sentencia ya no es ;*/
-accionMetodo ::= ID SUMA SUMA
-|ID RESTA RESTA
-;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*OPERACION String*/
-s ::= os;
-os::= os SUMA os {::}
-| P_APERTURA os P_CIERRE
-/*/*************************************************/
-;
-idDato ::= PUNTO idDatoFac
-|
-;
-idDatoFac ::= ID  idDato
-; 
-
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
-|
+|importacion
+;
+//punto id ; , punto id punto id ;
+pc ::= PUNTO ID pc
+| p
 ;
 importacion ::= IMPORT ID sp importacion
 |
 ;
+// punto id, ; , punto * ; , punto id punto * ;
 sp ::= PUNTO spp
 | p
 ;
 spp ::= MULTIPLICACION p
 | ID sp
 ;
-
-pc ::= PUNTO ID pc
-| p
-;
-
 p ::= PUNTO_COMA
-| error {::}
+| error {:System.out.println("te falto colocar ;");:}
 ;
 /*****FINAL PRIMERA PARTE****/
 /*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
-v ::= 
-| staticCfianl vc
-| staticCfianl
-| vc
-| vc staticCfianl
+clase ::= v CLASS ID L_APERTURA  internoClase  L_CIERRE
+;
+/*VISIBILIDAD DE LAS CLASES*/
+// STATIC FINAL, STATIC ,FINAL STATIC ,FINAL ,STATIC FINAL vc, STATIC vc ,FINAL STATIC vc,FINAL  vc
+// vc STATIC FINAL,vc STATIC , vc FINAL STATIC ,vc FINAL
+v ::= staticCfianl vfactorizadoStatic
+| vc vfactorizadoVC
+;
+vfactorizadoStatic ::= vc
+|
+;
+vfactorizadoVC ::= staticCfianl
+|
 ;
 staticCfianl ::= STATIC staticFactori
 |FINAL finalFactori
 ;
+//*
 staticFactori ::= FINAL
 |
 ;
@@ -219,93 +130,24 @@ vc ::= PUBLIC
 | PRIVATE
 | PROTECTED
 ;
-clase ::= v CLASS ID L_APERTURA {:System.out.println("****INICIO CLASES");:} internoClase {:System.out.println("****FINAL CLASES");:} L_CIERRE
-;
+/*FIANAL VISIBILIDAD DE LAS CLASES*/
 internoClase ::= vGlobal internoClaseFa
 | 
 ;
-internoClaseFa ::= variableID ayuda
-|ayuda
-;
-ayuda ::= asignacionVariable internoClase
-| metodo internoClase
-;
+/*VISIBILIDAD DE LAS VARIALBES DE ATRIBUTOS O METODOS DE UNA CLASE*/
 vGlobal ::= vc vGlobalFac 
 | vGlobalFac
 ;
 vGlobalFac ::= staticCfianl
 | 
 ;
-/*FINAL PARTE DE LA CLASE*/
-/*****************asignacionVariable DE UNA CLASE**************/
-asignacionVariable ::=  IGUAL tDatos p
-|p
+internoClaseFa ::= variableID ayuda
+|ayuda
 ;
-tDatos ::= numEnteroDecimal
-|vChar
-|trueOfalse
-|textoIngresoado
-|F
-|L_APERTURA lCon
-|NEW ID P_APERTURA  tFact
+/*AQUIE SE DIFERENCIA SI ES UNA METODO O ATRIBUTO*/
+ayuda ::= asignacionVariable internoClase
+| metodo internoClase
 ;
-tFact ::= dSeguidoF P_CIERRE 
-| P_CIERRE 
-;
-dSeguidoF ::= tDatos objectInst
-;
-objectInst ::= COMA dSeguidoF
-|
-;
-lCon ::= tDatos lConFact L_CIERRE
-| L_CIERRE
-;
-lConFact ::=  COMA tDatos  lConFact
-|
-;
-/*DATOS INGRESADOS*/
-textoIngresoado ::= s; 
-numEnteroDecimal ::= j;
-vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
-| CHARTN
-;
-trueOfalse ::= operarBoolean
-;
-
-/*DATOS INGRESADOS*/
-operarBoolean ::= operarBoolean IGUAL IGUAL operarBoolean 
-|operarBoolean MAYOR_Q opBooleanIGUALFac
-|operarBoolean MENOR_Q opBooleanIGUALFac
-|operarBoolean Y operarBoolean
-|operarBoolean O operarBoolean
-|FALSE
-|TRUE
-|ADMIRACION operarBoolean
-|j
-|C_APERTURA j C_CIERRE
-;
-
-opBooleanIGUALFac ::=  operarBoolean
-| IGUAL operarBoolean
-;
-/*OPERACION NUMERICA*/
-j ::= operaionNumerica {::} /*A QUI ESTA EL TOTAL DE LA OPERACION*/
-;
-operaionNumerica ::= operaionNumerica SUMA operaionNumerica {::}
-|  operaionNumerica RESTA operaionNumerica {::}
-|  operaionNumerica DIVISION operaionNumerica
-|  operaionNumerica MULTIPLICACION operaionNumerica
-| P_APERTURA cierreParentesis
-| ENTERO
-| DECIMAL
-| TEXT//"TEXT"
-| ID idDato
-;
-cierreParentesis ::= operaionNumerica P_CIERRE
-|operarBoolean P_CIERRE
-;
-
-/*DATOS */
 /*****************VARIABLE**************/
 variableID ::= numFloat 
 | numDouble 
@@ -326,16 +168,95 @@ numEntero ::= BYTE onlyIDArray
 | INT onlyIDArray
 | LONG onlyIDArray 
 ;
+//arreay [] | ID
 onlyIDArray ::= ID 
 | C_APERTURA C_CIERRE onlyIDArray
 ;
 /*****************FINAL VARIABLE**************/
-/*****************FINAL asignacionVariable DE UNA CLASE**************/
+/*****************VARIABLES INDIALIZADAS DE UNA CLASE**************/
+asignacionVariable ::=  IGUAL tDatos p
+|p
+;
+tDatos ::= P_APERTURA tDataP P_CIERRE
+|tDataP
+;
+tDataP ::= operadores
+|vChar
+|F
+|L_APERTURA lCon
+|NEW ID P_APERTURA  tFact
+;
+//para los char
+vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
+| CHARTN
+;
+//esto para new id (parametos de objetos)
+tFact ::= dSeguidoF P_CIERRE 
+| P_CIERRE 
+;
+dSeguidoF ::= tDatos objectInst
+;
+objectInst ::= COMA dSeguidoF
+|
+;
+// esto para crear arreglos{}
+lCon ::= tDatos lConFact L_CIERRE
+| L_CIERRE
+;
+lConFact ::=  COMA tDatos  lConFact
+|
+;
+/*OPERADORES*/
+operadores::= operarBoolean
+;
+/*FINAL OPERADORES*/
+operarBoolean ::= operarBoolean IGUAL IGUAL operarBoolean 
+|operarBoolean MAYOR_Q opBooleanIGUALFac
+|operarBoolean MENOR_Q opBooleanIGUALFac
+|operarBoolean Y operarBoolean
+|operarBoolean O operarBoolean
+|TEXT 
+|FALSE
+|TRUE
+|ADMIRACION operarBoolean
+|j
+|C_APERTURA j C_CIERRE
+;
+operarText ::= SUMA operarBoolean
+|
+;
+opBooleanIGUALFac ::=  operarBoolean
+| IGUAL operarBoolean
+;
+/*OPERACION NUMERICA*/
+j ::= operaionNumerica {::}
+;
+operaionNumerica ::= operaionNumerica SUMA operaionNumerica 
+| operaionNumerica RESTA operaionNumerica 
+| operaionNumerica DIVISION operaionNumerica
+| operaionNumerica MULTIPLICACION operaionNumerica
+| ENTERO
+| DECIMAL
+| usarOBJECT
+;
+//USAR OBJECT
+usarOBJECT ::= ID idDato;
+//ARRAY.LETER - 4 ,ID.ID(); //GET
+idDato ::= PUNTO idDatoFac
+|
+;
+idDatoFac ::= ID  idGet
+;
+idGet ::= idDato
+| P_APERTURA P_CIERRE
+;
+/*****************FINAL VARIABLES INDIALIZADAS DE UNA CLASE**************/
 /***********************************METODOS**************/
 metodo ::= P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo {:System.out.println("****FINAL METODO");:} L_CIERRE 
 |VOID  ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
 |ID P_APERTURA pMetodoS P_CIERRE L_APERTURA {:System.out.println("**********************************************************INICIO METODO*************************");:} localMetodo  {:System.out.println("****FINAL METODO");:} L_CIERRE
 ;
+//peticiiones de metodos
 pMetodoS ::= variableID pMetodoSP
 |
 ;
@@ -343,10 +264,21 @@ pMetodoSP ::= COMA pMetodoS
 | 
 ;
 /***********************************FINAL METODOS**************/
+/*LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
+localMetodo ::= local {:System.out.println("TERMINE DE REALIZAR UNA COSA EN LOCAL");:} localMetodo
+|
+;
+local ::= variableLocal
+|sentenciaControl
+|terminalAccion
+;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
-variableLocal ::= variableIDLocal asignacionVariable
-| RETURN variableLocal
-| BREAK p
+variableLocal ::= variableLocalFinal asignacionVariable
+;
+//VARIABLE FINAL 
+variableLocalFinal ::= FINAL variableIDLocal
+|variableIDLocal
+|usarVariable
 ;
 variableIDLocal ::= numFloat 
 | numDouble 
@@ -354,8 +286,8 @@ variableIDLocal ::= numFloat
 | variableBoolean 
 | variableStirng  
 | numEntero 
-| ID loclaMetodFacto
 ;
+//asignar al set
 loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear
 |
 ;
@@ -365,4 +297,62 @@ variableObjectUsarCrear ::= P_APERTURA variableSet
 variableSet ::= tDatos P_CIERRE
 |P_CIERRE
 ;
+/*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
+usarVariable ::= ID usarVariableFacto
+;
+// id ++ id-- id+= id -=
+usarVariableFacto ::= SUMA sumarIgual
+|RESTA restarIgual
+|loclaMetodFacto
+|IGUAL tDatos
+;
+restarIgual ::= IGUAL tDatos
+| RESTA
+;
+sumarIgual ::= IGUAL tDatos
+| SUMA
+;
+terminalAccion ::= RETURN tDatos p
+|BREAK p
+;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
+/*SENTENCIAS DE CONTROL*/
+sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
+|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA trueOfalse P_CIERRE p
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA ID P_CIERRE
+|FOR P_APERTURA variableIDFor  sentenciaFor
+;
+sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
+| trueOfalse p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
+;
+inializarVariable ::= variableIDFor asignacionVariable
+| ID forVariableId
+;  
+variableIDFor ::= numFloat 
+| numDouble 
+| variableChar 
+| variableBoolean 
+| variableStirng 
+| numEntero 
+;
+forVariableId ::= ID forVariableIdFac
+| C_APERTURA C_CIERRE forVariableId
+;
+forVariableIdFac ::= DOBLE_PUNTO ID
+| asignacionVariable
+;
+//USO DE IF ELSE IF ELSE
+sentenciaElse ::= ELSE  sentenciaElseFac
+|
+;
+sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
+|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+;
+/*FINAL SENTENCIAS DE CONTROL*/
+/*FINAL LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
+/*FINAL PARTE DE LA CLASE*/
+/
