@@ -30,9 +30,17 @@ public  class App {
                 System.out.println("no fue creado el " + fileTest.getName());
             }
         }
+        
         // convertidr ese archivo en texto
         String text = (new FileConverter()).upLoadTextFile(fileTest);
         // ANALISAR
+        boolean a = true;
+        if (a != true) {
+            
+        }
+        switch (text) {
+
+        }
         Reader reader = new StringReader(text);
         Lexico lexema = new Lexico(reader);
         Sintactico sic = new Sintactico(lexema);

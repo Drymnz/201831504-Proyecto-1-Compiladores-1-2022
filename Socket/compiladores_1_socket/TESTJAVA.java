@@ -1,4 +1,5 @@
 public class TESTJAVA {
+    public int p = 15+((1));
     public static BufFood comida1 = new BufFood("MANZANA", 1, 2);
     public static Animal[] listMio = {new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new MascotaNo("Hormiga", "Compañerismo", 1, 2, ListAnimal.Insecto, ListAnimal.Terrestre), new MascotaNo("Hormiga", "Compañerismo", 1, 2, ListAnimal.Insecto, ListAnimal.Terrestre)};
     public static Animal[] listBot = {new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null), new Animal("Mosquito", 2, 2, ListAnimal.Volador, null)};
@@ -8,6 +9,30 @@ public class TESTJAVA {
     public boolean segundoBoolean = primerBoolean;
     public boolean tercerBoolean ;
     public static void main(String[] args) {
+        int day = 5;
+        String dayString;
+         
+        // instrucción switch con tipo de datos int
+        switch (day) 
+        {
+            case 1:  dayString = "Lunes";
+                     break;
+            case 2:  dayString = "Martes";
+                     break;
+            case 3:  dayString = "Miercoles";
+                     break;
+            case 4:  dayString = "Jueves";
+                     break;
+            case 5:  dayString = "Viernes";
+                     break;
+            case 6:  dayString = "Sabado";
+                     break;
+            case 7:  dayString = "Domingo";
+                     break;
+            default: dayString = "Dia inválido";
+                     break;
+        }
+        System.out.println(dayString);
         Mosquito.comer(comida1);
         int select = listMio.length - 1;
         int selectBot = listMio.length - 1;

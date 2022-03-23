@@ -58,7 +58,7 @@ non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
 non terminal asignacionVariable,vGlobal,vChar;
 non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,dosY,dosO,variableStirng, variableObject;
-non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDataP,operadores;
+non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
@@ -69,12 +69,14 @@ non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,idGe
 /*SENTENCIAS DE CONTROLS*/
 non terminal sentenciaControl,usarVariable,restarIgual,sumarIgual,usarVariableFacto;
 non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,textOperar,tDatosFac;
+non terminal sentenciaElse,sentenciaElseFac,opBooleanIGUALFac,textOperar,tDatosFac;
+non terminal internoSwitch,caseSwitch,localSwitch,localSwitchDeclaracion,menorYmayorIgual;
+non terminal operacionNumericaRecusividad,operacionNumericaPrima,operacionNumericaTerminales;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
-precedence left IGUAL,MAYOR_Q,MENOR_Q, Y;
-precedence left IGUAL,MAYOR_Q,MENOR_Q, O;
+precedence left ADMIRACION,IGUAL,MAYOR_Q,MENOR_Q, Y;
+precedence left ADMIRACION,IGUAL,MAYOR_Q,MENOR_Q, O;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
@@ -177,18 +179,37 @@ onlyIDArray ::= ID
 asignacionVariable ::=  IGUAL tDatos p
 |p
 ;
-tDatos ::= P_APERTURA tDatos P_CIERRE tDatosFac
-|tDataP
-;
 //el uso del ()? tDatos : tDatos | ()? tDatos : ()? tDatos : tDatos
-tDatosFac ::= 
-| INTERO tDatos DOBLE_PUNTO tDatos
-;
-tDataP ::= operadores
+tDatos ::= P_APERTURA tDatos P_CIERRE tDatosFac
+|tDatos IGUAL IGUAL tDatos
+|tDatos MAYOR_Q menorYmayorIgual tDatos
+|tDatos MENOR_Q menorYmayorIgual tDatos
+|tDatos Y dosY tDatos
+|tDatos O dosO tDatos
+|tDatos ADMIRACION IGUAL dosO tDatos 
+|tDatos SUMA tDatos
+|tDatos RESTA tDatos
+|tDatos DIVISION tDatos
+|tDatos MULTIPLICACION tDatos
 |vChar
 |F
 |L_APERTURA lCon
 |NEW ID P_APERTURA  tFact
+|FALSE
+|TRUE
+|ADMIRACION tDatos
+|RESTA tDatos
+|SUMA tDatos
+|ENTERO
+|DECIMAL
+|TEXT textOperar
+|usarOBJECT
+;
+tDatosFac ::= 
+| INTERO tDatos DOBLE_PUNTO tDatos
+;
+menorYmayorIgual ::= IGUAL
+|
 ;
 //para los char
 vChar ::= SIMPLE_COMILLA CARACTER SIMPLE_COMILLA
@@ -210,22 +231,8 @@ lCon ::= tDatos lConFact L_CIERRE
 lConFact ::=  COMA tDatos  lConFact
 |
 ;
-/*OPERADORES*/
-operadores::= operarBoolean
-;
 /*FINAL OPERADORES*/
-operarBoolean ::= operarBoolean IGUAL IGUAL operarBoolean 
-|operarBoolean MAYOR_Q opBooleanIGUALFac
-|operarBoolean MENOR_Q opBooleanIGUALFac
-|operarBoolean Y dosY operarBoolean
-|operarBoolean O dosO operarBoolean 
-|FALSE
-|TRUE
-|ADMIRACION operarBoolean
-|j
-|C_APERTURA j C_CIERRE
-;
-textOperar ::= SUMA operadores
+textOperar ::= SUMA tDatos
 |
 ;
 dosY ::= Y
@@ -234,17 +241,23 @@ dosY ::= Y
 dosO ::= O
 |
 ;
-opBooleanIGUALFac ::=  operarBoolean
-| IGUAL operarBoolean
+opBooleanIGUALFac ::=  tDatos
+| IGUAL tDatos
 ;
 /*OPERACION NUMERICA*/
-j ::= operaionNumerica {::}
+j ::= operacionNumericaRecusividad {::}
 ;
-operaionNumerica ::= operaionNumerica SUMA operaionNumerica 
-| operaionNumerica RESTA operaionNumerica 
-| operaionNumerica DIVISION operaionNumerica
-| operaionNumerica MULTIPLICACION operaionNumerica
-| RESTA operaionNumerica
+operaionNumerica ::= 
+;
+operacionNumericaRecusividad ::= operacionNumericaPrima operacionNumericaTerminales operacionNumericaPrima
+;
+operacionNumericaPrima ::= SUMA  
+|  RESTA  
+|  DIVISION 
+|  MULTIPLICACION 
+|
+;
+operacionNumericaTerminales ::= RESTA operaionNumerica
 | SUMA operaionNumerica
 | ENTERO
 | DECIMAL
@@ -337,17 +350,26 @@ terminalAccion ::= RETURN tDatos p
 ;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
 /*SENTENCIAS DE CONTROL*/
-sentenciaControl ::= WHILE P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE
-|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA operadores P_CIERRE p
-|IF P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
-//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA ID P_CIERRE
+sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE
+|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA tDatos P_CIERRE p
+|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+|SWITCH P_APERTURA tDatos P_CIERRE L_APERTURA internoSwitch L_CIERRE
 |FOR P_APERTURA inializarVariable  sentenciaFor
 ;
+//sentencia de switch
+internoSwitch ::= CASE tDatos  DOBLE_PUNTO localSwitch internoSwitch
+|DEFAULT DOBLE_PUNTO localSwitch  
+|
+;
+localSwitch ::= localSwitchDeclaracion  localSwitch 
+|terminalAccion //esto de ultimo si o si
+;
+localSwitchDeclaracion ::= variableLocal
+|sentenciaControl
+;
+//sentencia de for
 sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
-| operadores p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
+| tDatos p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
 ;
 inializarVariable ::= variableIDFor asignacionVariable
 | ID forVariableId
@@ -370,9 +392,8 @@ sentenciaElse ::= ELSE  sentenciaElseFac
 |
 ;
 sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
 ;
 /*FINAL SENTENCIAS DE CONTROL*/
 /*FINAL LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
 /*FINAL PARTE DE LA CLASE*/
-/
