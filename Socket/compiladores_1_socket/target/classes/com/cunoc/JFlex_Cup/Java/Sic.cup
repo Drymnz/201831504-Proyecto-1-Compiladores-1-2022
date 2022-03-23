@@ -56,8 +56,8 @@ non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoV
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
-non terminal asignacionVariable,vGlobal,numEnteroDecimal,vChar,trueOfalse;
-non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
+non terminal asignacionVariable,vGlobal,numEnteroDecimal,vChar;
+non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,dosY,dosO,variableStirng, variableObject;
 non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDataP,operadores;
 /*METODOS*/
 non terminal metodo,pMetodoS,pMetodoSP;
@@ -69,7 +69,7 @@ non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,idGe
 /*SENTENCIAS DE CONTROLS*/
 non terminal sentenciaControl,usarVariable,restarIgual,sumarIgual,usarVariableFacto;
 non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac;
+non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,textOperar;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -97,7 +97,7 @@ sp ::= PUNTO spp
 spp ::= MULTIPLICACION p
 | ID sp
 ;
-p ::= PUNTO_COMA
+p ::=  PUNTO_COMA
 | error {:System.out.println("te falto colocar ;");:}
 ;
 /*****FINAL PRIMERA PARTE****/
@@ -177,7 +177,7 @@ onlyIDArray ::= ID
 asignacionVariable ::=  IGUAL tDatos p
 |p
 ;
-tDatos ::= P_APERTURA tDataP P_CIERRE
+tDatos ::= P_APERTURA tDatos P_CIERRE
 |tDataP
 ;
 tDataP ::= operadores
@@ -213,14 +213,22 @@ operadores::= operarBoolean
 operarBoolean ::= operarBoolean IGUAL IGUAL operarBoolean 
 |operarBoolean MAYOR_Q opBooleanIGUALFac
 |operarBoolean MENOR_Q opBooleanIGUALFac
-|operarBoolean Y operarBoolean
-|operarBoolean O operarBoolean
-|TEXT 
+|operarBoolean Y dosY operarBoolean
+|operarBoolean O dosO operarBoolean 
 |FALSE
 |TRUE
 |ADMIRACION operarBoolean
 |j
 |C_APERTURA j C_CIERRE
+;
+textOperar ::= SUMA operadores
+|
+;
+dosY ::= Y
+|
+;
+dosO ::= O
+|
 ;
 operarText ::= SUMA operarBoolean
 |
@@ -237,18 +245,21 @@ operaionNumerica ::= operaionNumerica SUMA operaionNumerica
 | operaionNumerica MULTIPLICACION operaionNumerica
 | ENTERO
 | DECIMAL
+| TEXT textOperar
 | usarOBJECT
 ;
 //USAR OBJECT
 usarOBJECT ::= ID idDato;
 //ARRAY.LETER - 4 ,ID.ID(); //GET
 idDato ::= PUNTO idDatoFac
+|C_APERTURA j C_CIERRE idDato
+|P_APERTURA dSeguidoF P_CIERRE
 |
 ;
 idDatoFac ::= ID  idGet
 ;
 idGet ::= idDato
-| P_APERTURA P_CIERRE
+| P_APERTURA P_CIERRE 
 ;
 /*****************FINAL VARIABLES INDIALIZADAS DE UNA CLASE**************/
 /***********************************METODOS**************/
@@ -265,11 +276,13 @@ pMetodoSP ::= COMA pMetodoS
 ;
 /***********************************FINAL METODOS**************/
 /*LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
-localMetodo ::= local {:System.out.println("TERMINE DE REALIZAR UNA COSA EN LOCAL");:} localMetodo
+localMetodo ::= local  localMetodo
 |
 ;
 local ::= variableLocal
-|sentenciaControl
+|{:System.out.println("************************SENTENCIA DE CONTORL********");:}
+sentenciaControl
+{:System.out.println("************************FINAL SENTENCIA DE CONTORL********");:}
 |terminalAccion
 ;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
@@ -279,6 +292,7 @@ variableLocal ::= variableLocalFinal asignacionVariable
 variableLocalFinal ::= FINAL variableIDLocal
 |variableIDLocal
 |usarVariable
+|terminalAccion
 ;
 variableIDLocal ::= numFloat 
 | numDouble 
@@ -294,7 +308,7 @@ loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear
 variableObjectUsarCrear ::= P_APERTURA variableSet
 |loclaMetodFacto
 ;
-variableSet ::= tDatos P_CIERRE
+variableSet ::= tDatos P_CIERRE 
 |P_CIERRE
 ;
 /*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
@@ -305,6 +319,7 @@ usarVariableFacto ::= SUMA sumarIgual
 |RESTA restarIgual
 |loclaMetodFacto
 |IGUAL tDatos
+|C_APERTURA j C_CIERRE loclaMetodFacto
 ;
 restarIgual ::= IGUAL tDatos
 | RESTA
@@ -317,17 +332,17 @@ terminalAccion ::= RETURN tDatos p
 ;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
 /*SENTENCIAS DE CONTROL*/
-sentenciaControl ::= WHILE P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE
-|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA trueOfalse P_CIERRE p
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
-//|SWITCH P_APERTURA trueOfalse P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+sentenciaControl ::= WHILE P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE
+|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA operadores P_CIERRE p
+|IF P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
+//|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
 //|SWITCH P_APERTURA ID P_CIERRE
 |FOR P_APERTURA variableIDFor  sentenciaFor
 ;
 sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
-| trueOfalse p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
+| operadores p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
 ;
 inializarVariable ::= variableIDFor asignacionVariable
 | ID forVariableId
@@ -350,7 +365,7 @@ sentenciaElse ::= ELSE  sentenciaElseFac
 |
 ;
 sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA trueOfalse P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+|IF P_APERTURA operadores P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
 ;
 /*FINAL SENTENCIAS DE CONTROL*/
 /*FINAL LO QUE SE PUEDE HACER DENTRO DE UN METODO*/
