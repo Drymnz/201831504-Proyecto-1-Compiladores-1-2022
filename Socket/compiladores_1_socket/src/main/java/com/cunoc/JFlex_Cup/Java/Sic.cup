@@ -56,7 +56,7 @@ non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoV
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda;
 /*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
-non terminal asignacionVariable,vGlobal,numEnteroDecimal,vChar;
+non terminal asignacionVariable,vGlobal,vChar;
 non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,dosY,dosO,variableStirng, variableObject;
 non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDataP,operadores;
 /*METODOS*/
@@ -64,12 +64,12 @@ non terminal metodo,pMetodoS,pMetodoSP;
 non terminal onlyIDArray,staticFactori,finalFactori;
 non terminal idDatoFac ,tFact,lCon, idDato;
 /*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,operarText,terminalAccion;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,terminalAccion;
 non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,idGet,variableLocalFinal;
 /*SENTENCIAS DE CONTROLS*/
 non terminal sentenciaControl,usarVariable,restarIgual,sumarIgual,usarVariableFacto;
 non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,textOperar;
+non terminal sentenciaElse,sentenciaElseFac,operarBoolean,opBooleanIGUALFac,textOperar,tDatosFac;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -78,7 +78,7 @@ precedence left IGUAL,MAYOR_Q,MENOR_Q, O;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
-inicio ::= encabezado clase;
+inicio ::={:System.out.println("COMENZO EL ANALISIS");:} encabezado clase {:System.out.println("TERMINO EL ANALISIS");:};
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
 |importacion
@@ -177,8 +177,12 @@ onlyIDArray ::= ID
 asignacionVariable ::=  IGUAL tDatos p
 |p
 ;
-tDatos ::= P_APERTURA tDatos P_CIERRE
+tDatos ::= P_APERTURA tDatos P_CIERRE tDatosFac
 |tDataP
+;
+//el uso del ()? tDatos : tDatos | ()? tDatos : ()? tDatos : tDatos
+tDatosFac ::= 
+| INTERO tDatos DOBLE_PUNTO tDatos
 ;
 tDataP ::= operadores
 |vChar
@@ -230,9 +234,6 @@ dosY ::= Y
 dosO ::= O
 |
 ;
-operarText ::= SUMA operarBoolean
-|
-;
 opBooleanIGUALFac ::=  operarBoolean
 | IGUAL operarBoolean
 ;
@@ -243,6 +244,8 @@ operaionNumerica ::= operaionNumerica SUMA operaionNumerica
 | operaionNumerica RESTA operaionNumerica 
 | operaionNumerica DIVISION operaionNumerica
 | operaionNumerica MULTIPLICACION operaionNumerica
+| RESTA operaionNumerica
+| SUMA operaionNumerica
 | ENTERO
 | DECIMAL
 | TEXT textOperar
@@ -313,6 +316,8 @@ variableSet ::= tDatos P_CIERRE
 ;
 /*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
 usarVariable ::= ID usarVariableFacto
+|THIS loclaMetodFacto
+|SUPER loclaMetodFacto
 ;
 // id ++ id-- id+= id -=
 usarVariableFacto ::= SUMA sumarIgual
@@ -339,7 +344,7 @@ sentenciaControl ::= WHILE P_APERTURA operadores P_CIERRE L_APERTURA localMetodo
 //|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p DEFAULT DOBLE_PUNTO localMetodo BREAK p L_CIERRE
 //|SWITCH P_APERTURA operadores P_CIERRE L_APERTURA CASE j DOBLE_PUNTO localMetodo BREAK p CASE j DOBLE_PUNTO localMetodo BREAK p L_CIERRE
 //|SWITCH P_APERTURA ID P_CIERRE
-|FOR P_APERTURA variableIDFor  sentenciaFor
+|FOR P_APERTURA inializarVariable  sentenciaFor
 ;
 sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
 | operadores p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
