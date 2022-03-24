@@ -5,6 +5,9 @@
 /*primer seccion: codigo java que se copiara arriba*/
 package com.cunoc.JFlex_Cup.Java;
 import java_cup.runtime.*;
+import java.util.List;
+import java.util.ArrayList;
+import com.cunoc.JFlex_Cup.Token;
 
 // See https://github.com/jflex-de/jflex/issues/222
 @SuppressWarnings("FallThrough")
@@ -498,12 +501,19 @@ public class Lexico implements java_cup.runtime.Scanner {
   private boolean zzEOFDone;
 
   /* user code: */
+    List<Token> listComments =  new ArrayList<>();
     /*CODE*/
     private void print(String token){
         System.out.println("\n"+token);
-        System.out.println("<linea:"+yyline+"><colum:"+yycolumn+"><TOKEN:"+yytext()+">");
+        System.out.println("<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
     }
     /*CODE*/
+    private void addComments(){
+        listComments.add(new Token((yyline+1),(yycolumn+1),yytext()));
+    }
+    public List<Token>  getlistComments(){
+        return this.listComments;
+    };
 
 
   /**
@@ -1002,7 +1012,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 88: break;
           case 19:
-            { print("IGUAL");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext()));
+            { print("=");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 89: break;
@@ -1057,17 +1067,17 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 99: break;
           case 30:
-            { print("CUALQUIER CARACTER");return new Symbol(sym.CARACTER,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CARACTER,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 100: break;
           case 31:
-            { /*COMENTARIO DE UNA LINEA*/
+            { addComments();/*COMENTARIO DE UNA LINEA*/
             }
             // fall through
           case 101: break;
           case 32:
-            { print("CHARTN");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext()));
+            { print("/u{ENTERO}[a-z]?");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 102: break;
@@ -1097,12 +1107,12 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 107: break;
           case 38:
-            { /*COMENTARIO MULTILINEA*/
+            { addComments();/*COMENTARIO MULTILINEA*/
             }
             // fall through
           case 108: break;
           case 39:
-            { print("F");return new Symbol(sym.F,yyline,yycolumn, (yytext()));
+            { print("{DECIMAL}f");return new Symbol(sym.F,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 109: break;
@@ -1112,7 +1122,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 110: break;
           case 41:
-            { print("CASE");return new Symbol(sym.CASE,yyline,yycolumn, (yytext()));
+            { print("case");return new Symbol(sym.CASE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 111: break;
@@ -1142,7 +1152,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 116: break;
           case 47:
-            { return new Symbol(sym.VOID,yyline,yycolumn, (yytext()));
+            { print("void");return new Symbol(sym.VOID,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 117: break;
@@ -1202,12 +1212,12 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 128: break;
           case 59:
-            { return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext()));
+            { print("import");return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 129: break;
           case 60:
-            { return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext()));
+            { print("public");return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 130: break;
@@ -1217,7 +1227,7 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 131: break;
           case 62:
-            { return new Symbol(sym.STATIC,yyline,yycolumn, (yytext()));
+            { print("static");return new Symbol(sym.STATIC,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 132: break;
@@ -1242,17 +1252,17 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 136: break;
           case 67:
-            { return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext()));
+            { print("package");return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 137: break;
           case 68:
-            { return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext()));
+            { print("private");return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 138: break;
           case 69:
-            { return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext()));
+            { print("protected");return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 139: break;

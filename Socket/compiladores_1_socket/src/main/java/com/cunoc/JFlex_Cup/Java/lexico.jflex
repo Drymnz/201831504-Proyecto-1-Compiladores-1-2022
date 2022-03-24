@@ -1,6 +1,9 @@
 /*primer seccion: codigo java que se copiara arriba*/
 package com.cunoc.JFlex_Cup.Java;
 import java_cup.runtime.*;
+import java.util.List;
+import java.util.ArrayList;
+import com.cunoc.JFlex_Cup.Token;
 %%
 /*segunda seccion: configuracion*/
 %class Lexico
@@ -10,12 +13,19 @@ import java_cup.runtime.*;
 %cup
 %public
 %{
+    List<Token> listComments =  new ArrayList<>();
     /*CODE*/
     private void print(String token){
         System.out.println("\n"+token);
-        System.out.println("<linea:"+yyline+"><colum:"+yycolumn+"><TOKEN:"+yytext()+">");
+        System.out.println("<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
     }
     /*CODE*/
+    private void addComments(){
+        listComments.add(new Token((yyline+1),(yycolumn+1),yytext()));
+    }
+    public List<Token>  getlistComments(){
+        return this.listComments;
+    };
 %}
 LETRAS = [á|é|í|ó|ú|ñ|â|ê|î|ô|û|Ã|±]
 CARACTER = {LETRAS} | [a-zA-Z] | _  
@@ -27,8 +37,8 @@ espacio =[\r|\t|\f|\n|\s| ]+
 %%
 /*tercer seccion: reglase lexicas*/
 /*INGNORAR*/
-"/*" ~"*/"          {/*COMENTARIO MULTILINEA*/}
-"//".*"\n"          {/*COMENTARIO DE UNA LINEA*/}
+"/*" ~"*/"          {addComments();/*COMENTARIO MULTILINEA*/}
+"//".*"\n"          {addComments();/*COMENTARIO DE UNA LINEA*/}
 {espacio}           {/*ESPACIOS*/}
 /*FINAL INGNORAR*/
 /*RECORDAR  {return new Symbol(sym.BYTE(INT),yyline(INT),yycolumn, (yytext()))(OBJET); }*/
@@ -45,24 +55,20 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FINAL VARIALBES PRIMITIVAS*/
 "true"              {print("true");return new Symbol(sym.TRUE,yyline,yycolumn, (yytext())); }
 "false"             {print("false");return new Symbol(sym.FALSE,yyline,yycolumn, (yytext())); }
-{DECIMAL}"f"        {print("F");return new Symbol(sym.F,yyline,yycolumn, (yytext())); }
-"/u"{ENTERO}[a-z]?  {print("CHARTN");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext())); }
+{DECIMAL}"f"        {print("{DECIMAL}f");return new Symbol(sym.F,yyline,yycolumn, (yytext())); }
+"/u"{ENTERO}[a-z]?  {print("/u{ENTERO}[a-z]?");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext())); }
 /*PALABRAS RESERVADAS*/
-"package"           {return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext())); }
-"import"            {return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext())); }
+"package"           {print("package");return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext())); }
+"import"            {print("import");return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext())); }
 "class"             {print("class");return new Symbol(sym.CLASS,yyline,yycolumn, (yytext())); }
 "this"              {print("this");return new Symbol(sym.THIS,yyline,yycolumn, (yytext())); }
-
 "extends"           {print("extends");return new Symbol(sym.EXNTENDS,yyline,yycolumn, (yytext())); }
 "implements"        {print("implements");return new Symbol(sym.IMPLEMENTS,yyline,yycolumn, (yytext())); }
 "super"             {print("super");return new Symbol(sym.SUPER,yyline,yycolumn, (yytext())); }
-
 "new"               {print("new");return new Symbol(sym.NEW,yyline,yycolumn, (yytext())); }
-"void"              {return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
-
+"void"              {print("void");return new Symbol(sym.VOID,yyline,yycolumn, (yytext())); }
 "try"               {print("try");return new Symbol(sym.TRY,yyline,yycolumn, (yytext())); }
 "catch"             {print("catch");return new Symbol(sym.CATCH,yyline,yycolumn, (yytext())); }
-
 /*SENTENCIAS DE CONTORL*/
 "for"               {print("for");return new Symbol(sym.FOR,yyline,yycolumn, (yytext())); }
 "while"             {print("while");return new Symbol(sym.WHILE,yyline,yycolumn, (yytext())); }
@@ -70,8 +76,7 @@ espacio =[\r|\t|\f|\n|\s| ]+
 "if"                {print("if");return new Symbol(sym.IF,yyline,yycolumn, (yytext())); }
 "else"              {print("else");return new Symbol(sym.ELSE,yyline,yycolumn, (yytext())); }
 "switch"            {print("switch");return new Symbol(sym.SWITCH,yyline,yycolumn, (yytext())); }
-
-"case"              {print("CASE");return new Symbol(sym.CASE,yyline,yycolumn, (yytext())); }
+"case"              {print("case");return new Symbol(sym.CASE,yyline,yycolumn, (yytext())); }
 /*FIN SENTENCIAS DE CONTORL*/
 /*FINAL SENTENCIAS DE CONTORL*/
 "break"             {print("break");return new Symbol(sym.BREAK,yyline,yycolumn, (yytext())); }
@@ -80,11 +85,11 @@ espacio =[\r|\t|\f|\n|\s| ]+
 /*FIN FINAL SENTENCIAS DE CONTORL*/
 /*FINAL PALABRAS RESERVADAS*/
 /*VISIBILIDA*/
-"private"           {return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext())); }
-"public"            {return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext())); }
-"protected"         {return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext())); }
+"private"           {print("private");return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext())); }
+"public"            {print("public");return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext())); }
+"protected"         {print("protected");return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext())); }
 "final"             {print("final");return new Symbol(sym.FINAL,yyline,yycolumn, (yytext())); }
-"static"            {return new Symbol(sym.STATIC,yyline,yycolumn, (yytext())); }
+"static"            {print("static");return new Symbol(sym.STATIC,yyline,yycolumn, (yytext())); }
 /*FIN VISIBILIDA*/
 /*SIMBOLOS DE PUNTUACION*/
 "'"                 {print("'");return new Symbol(sym.SIMPLE_COMILLA,yyline,yycolumn, (yytext())); }
@@ -99,11 +104,9 @@ espacio =[\r|\t|\f|\n|\s| ]+
 "*"                 {print("*");return new Symbol(sym.MULTIPLICACION,yyline,yycolumn, (yytext())); }
 "/"                 {print("/");return new Symbol(sym.DIVISION,yyline,yycolumn, (yytext())); }
 "%"                 {print("%");return new Symbol(sym.MODULO,yyline,yycolumn, (yytext())); }
-//"++"                {return new Symbol(sym.INCREMENTO,yyline,yycolumn, (yytext())); }
-//"--"                {return new Symbol(sym.DECREMENTO,yyline,yycolumn, (yytext())); }
 /*FINAL SIMBOLOS ARITMETRICOS*/
 /*SIMBOLOS OPERADOR*/
-"="                 {print("IGUAL");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext())); }
+"="                 {print("=");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext())); }
 "!"                 {print("!");return new Symbol(sym.ADMIRACION,yyline,yycolumn, (yytext())); }
 "?"                 {print("?");return new Symbol(sym.INTERO,yyline,yycolumn, (yytext())); }
 //+= , -= , *= , /= , %=
@@ -129,5 +132,5 @@ espacio =[\r|\t|\f|\n|\s| ]+
 {DECIMAL}           {print("{DECIMAL}");return new Symbol(sym.DECIMAL,yyline,yycolumn, (yytext())); }
 {ID}                {print("{ID}");return new Symbol(sym.ID,yyline,yycolumn, (yytext())); }
 /*ERROR LEXICO*/
-"'"."'"             {print("CUALQUIER CARACTER");return new Symbol(sym.CARACTER,yyline,yycolumn, (yytext())); }
+"'"."'"             {return new Symbol(sym.CARACTER,yyline,yycolumn, (yytext())); }
 [^]                 { System.out.println("error");throw new Error("Illegal character <"+yytext()+">"); }
