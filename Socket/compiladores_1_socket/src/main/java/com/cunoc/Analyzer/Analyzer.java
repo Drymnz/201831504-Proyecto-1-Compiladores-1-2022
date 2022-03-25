@@ -8,6 +8,7 @@ import com.cunoc.JFlex_Cup.Java.Lexico;
 import com.cunoc.JFlex_Cup.Java.Sintactico;
 import com.cunoc.JFlex_Cup.Java.sym;
 import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
+import com.cunoc.Server.Console;
 
 import java_cup.runtime.Symbol;
 
@@ -36,8 +37,10 @@ public class Analyzer implements Runnable {
                 Symbol s = sic.getSymbol();
                 errorCounter += sic.getErrorCounter();
                 if (s != null) {
-                    System.out.print("\n" + sic.getErrorCounter() +" - Clase<"+sic.getNameClass()+">- En simbolo<" + sym.terminalNames[s.sym]
-                            + String.format(">posicion: <%d>, <%d>", (s.left + 1), (s.right + 1)));
+                    Console.ConsoleText
+                            .append("\n" + sic.getErrorCounter() + " - Clase<" + sic.getNameClass() + ">- En simbolo<"
+                                    + sym.terminalNames[s.sym]
+                                    + String.format(">posicion: <%d>, <%d>", (s.left + 1), (s.right + 1)));
                 }
                 e.printStackTrace();
                 System.out.println(e.getMessage());
@@ -57,7 +60,7 @@ public class Analyzer implements Runnable {
                 proyect.add(analyzer);
             }
         } catch (Exception e) {
-            System.out.println("error");
+            Console.ConsoleText.append("error");
         }
     }
 

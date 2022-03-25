@@ -4,6 +4,7 @@ import java_cup.runtime.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.cunoc.Server.Console;
 import com.cunoc.JFlex_Cup.Java.repetition.ListType;
 import com.cunoc.JFlex_Cup.Java.repetition.Method;
 import com.cunoc.JFlex_Cup.Java.repetition.Variable;
@@ -26,7 +27,7 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
         }
         public void syntax_error(Symbol cur_token) {
             errorCounter++;
-            System.out.print("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+            Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }
         /*public void unrecovered_syntax_error(Symbol cur_token) {
             if (cur_token.sym == sym.EOF) {
@@ -517,7 +518,7 @@ sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_C
 ;
 //sentencia try ca
 //sentencia de switch
-internoSwitch ::= CASE tDatos  DOBLE_PUNTO localSwitch internoSwitch
+internoSwitch ::= CASE dSeguidoF  DOBLE_PUNTO localSwitch internoSwitch
 |DEFAULT DOBLE_PUNTO localSwitch  
 |
 ;

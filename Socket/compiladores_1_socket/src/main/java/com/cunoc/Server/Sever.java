@@ -4,6 +4,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+
+import com.cunoc.Analyzer.Analyzer;
+import com.cunoc.Analyzer.CompaProyect;
+import com.cunoc.Analyzer.ConvertirJSon;
+import com.cunoc.Analyzer.JSon;
+import com.cunoc.Analyzer.ProjectAnalyzer;
+import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
 
 public class Sever extends Thread {
     private final int port;
@@ -27,14 +35,15 @@ public class Sever extends Thread {
                 ObjectInputStream in = new ObjectInputStream(socketClient.getInputStream());
                 Package recvPack = (Package) in.readObject();
                 Console.ConsoleText.append(recvPack.getName());
+                //Comparet(listTwo, listadoOne);
             }
         } catch (Exception e) {
             Console.ConsoleText.append("Error en el arranque de servidor");
         }
     }
-    private void Comparet(){
-        /*ProjectAnalyzer proyecttwo = new ProjectAnalyzer(listPurevasTWO);
-        ProjectAnalyzer proyectOne = new ProjectAnalyzer(listPurevas);
+    private void Comparet(ArrayList<String> listTwo,ArrayList<String> listadoOne){
+        ProjectAnalyzer proyecttwo = new ProjectAnalyzer(listTwo);
+        ProjectAnalyzer proyectOne = new ProjectAnalyzer(listadoOne);
         proyectOne.start();
         proyecttwo.start();
         try {
@@ -52,7 +61,7 @@ public class Sever extends Thread {
             System.out.println(new ConvertirJSon().objectJSonString(result));
         } else {
             Console.ConsoleText.append("hay errores en una clase");
-        }*/
+        }
     }
 
 }
