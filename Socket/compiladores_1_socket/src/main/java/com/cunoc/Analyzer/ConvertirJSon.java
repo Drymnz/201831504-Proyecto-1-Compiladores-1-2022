@@ -76,8 +76,7 @@ public class ConvertirJSon {
         text += JUMPLE + TABULATOR + COMMENTS + POINT_DOUBLE + P_BRACKET;
         for (Token element : user.getListComments()) {
             text += JUMPLE + TABULATOR + TABULATOR + P_KEY;
-            text += TEXT + QUOTATIONMARKS + element.getLexeme() + QUOTATIONMARKS;
-            text += C_KEY;
+            text += TEXT +POINT_DOUBLE+ QUOTATIONMARKS + element.getLexeme() + QUOTATIONMARKS+C_KEY;
             i++;
             text += (i > 0 & i < user.getListComments().size()) ? COMA : "";
         }
