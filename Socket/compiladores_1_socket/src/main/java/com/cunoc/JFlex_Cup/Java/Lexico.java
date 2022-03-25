@@ -502,12 +502,6 @@ public class Lexico implements java_cup.runtime.Scanner {
 
   /* user code: */
     List<Token> listComments =  new ArrayList<>();
-    /*CODE*/
-    private void print(String token){
-        System.out.println("\n"+token);
-        System.out.println("<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
-    }
-    /*CODE*/
     private void addComments(){
         listComments.add(new Token((yyline+1),(yycolumn+1),yytext()));
     }
@@ -932,137 +926,137 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 72: break;
           case 3:
-            { print("!");return new Symbol(sym.ADMIRACION,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.ADMIRACION,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 73: break;
           case 4:
-            { print("%");return new Symbol(sym.MODULO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.MODULO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 74: break;
           case 5:
-            { print("&");return new Symbol(sym.Y,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.Y,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 75: break;
           case 6:
-            { print("'");return new Symbol(sym.SIMPLE_COMILLA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.SIMPLE_COMILLA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 76: break;
           case 7:
-            { print("(");return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.P_APERTURA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 77: break;
           case 8:
-            { print(")");return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.P_CIERRE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 78: break;
           case 9:
-            { print("*");return new Symbol(sym.MULTIPLICACION,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.MULTIPLICACION,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 79: break;
           case 10:
-            { print("+");return new Symbol(sym.SUMA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.SUMA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 80: break;
           case 11:
-            { print(",");return new Symbol(sym.COMA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.COMA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 81: break;
           case 12:
-            { print("-");return new Symbol(sym.RESTA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.RESTA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 82: break;
           case 13:
-            { print(".");return new Symbol(sym.PUNTO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PUNTO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 83: break;
           case 14:
-            { print("/");return new Symbol(sym.DIVISION,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DIVISION,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 84: break;
           case 15:
-            { print("{ENTERO}");return new Symbol(sym.ENTERO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.ENTERO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 85: break;
           case 16:
-            { print(":");return new Symbol(sym.DOBLE_PUNTO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DOBLE_PUNTO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 86: break;
           case 17:
-            { print(";");return new Symbol(sym.PUNTO_COMA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PUNTO_COMA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 87: break;
           case 18:
-            { print("<");return new Symbol(sym.MENOR_Q,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.MENOR_Q,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 88: break;
           case 19:
-            { print("=");return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.IGUAL,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 89: break;
           case 20:
-            { print(">");return new Symbol(sym.MAYOR_Q,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.MAYOR_Q,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 90: break;
           case 21:
-            { print("?");return new Symbol(sym.INTERO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.INTERO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 91: break;
           case 22:
-            { print("{ID}");return new Symbol(sym.ID,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.ID,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 92: break;
           case 23:
-            { print("[");return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.C_APERTURA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 93: break;
           case 24:
-            { print("]");return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.C_CIERRE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 94: break;
           case 25:
-            { print("{");return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.L_APERTURA,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 95: break;
           case 26:
-            { print("}");return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.L_CIERRE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 96: break;
           case 27:
-            { print("{STRING}");return new Symbol(sym.TEXT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.TEXT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 97: break;
           case 28:
-            { print("do");return new Symbol(sym.DO,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DO,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 98: break;
           case 29:
-            { print("if");return new Symbol(sym.IF,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.IF,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 99: break;
@@ -1077,32 +1071,32 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 101: break;
           case 32:
-            { print("/u{ENTERO}[a-z]?");return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CHARTN,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 102: break;
           case 33:
-            { print("{DECIMAL}");return new Symbol(sym.DECIMAL,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DECIMAL,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 103: break;
           case 34:
-            { print("for");return new Symbol(sym.FOR,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.FOR,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 104: break;
           case 35:
-            { print("int");return new Symbol(sym.INT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.INT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 105: break;
           case 36:
-            { print("new");return new Symbol(sym.NEW,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.NEW,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 106: break;
           case 37:
-            { print("try");return new Symbol(sym.TRY,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.TRY,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 107: break;
@@ -1112,162 +1106,162 @@ public class Lexico implements java_cup.runtime.Scanner {
             // fall through
           case 108: break;
           case 39:
-            { print("{DECIMAL}f");return new Symbol(sym.F,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.F,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 109: break;
           case 40:
-            { print("byte");return new Symbol(sym.BYTE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.BYTE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 110: break;
           case 41:
-            { print("case");return new Symbol(sym.CASE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CASE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 111: break;
           case 42:
-            { print("char");return new Symbol(sym.CHAR,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CHAR,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 112: break;
           case 43:
-            { print("else");return new Symbol(sym.ELSE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.ELSE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 113: break;
           case 44:
-            { print("long");return new Symbol(sym.LONG,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.LONG,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 114: break;
           case 45:
-            { print("this");return new Symbol(sym.THIS,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.THIS,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 115: break;
           case 46:
-            { print("true");return new Symbol(sym.TRUE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.TRUE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 116: break;
           case 47:
-            { print("void");return new Symbol(sym.VOID,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.VOID,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 117: break;
           case 48:
-            { print("break");return new Symbol(sym.BREAK,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.BREAK,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 118: break;
           case 49:
-            { print("catch");return new Symbol(sym.CATCH,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CATCH,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 119: break;
           case 50:
-            { print("class");return new Symbol(sym.CLASS,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.CLASS,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 120: break;
           case 51:
-            { print("false");return new Symbol(sym.FALSE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.FALSE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 121: break;
           case 52:
-            { print("final");return new Symbol(sym.FINAL,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.FINAL,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 122: break;
           case 53:
-            { print("float");return new Symbol(sym.FLOAT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.FLOAT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 123: break;
           case 54:
-            { print("short");return new Symbol(sym.SHORT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.SHORT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 124: break;
           case 55:
-            { print("super");return new Symbol(sym.SUPER,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.SUPER,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 125: break;
           case 56:
-            { print("while");return new Symbol(sym.WHILE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.WHILE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 126: break;
           case 57:
-            { print("String");return new Symbol(sym.STRING,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.STRING,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 127: break;
           case 58:
-            { print("double");return new Symbol(sym.DOUBLE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DOUBLE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 128: break;
           case 59:
-            { print("import");return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.IMPORT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 129: break;
           case 60:
-            { print("public");return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PUBLIC,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 130: break;
           case 61:
-            { print("return");return new Symbol(sym.RETURN,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.RETURN,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 131: break;
           case 62:
-            { print("static");return new Symbol(sym.STATIC,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.STATIC,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 132: break;
           case 63:
-            { print("switch");return new Symbol(sym.SWITCH,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.SWITCH,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 133: break;
           case 64:
-            { print("boolean");return new Symbol(sym.BOOLEAN,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.BOOLEAN,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 134: break;
           case 65:
-            { print("default");return new Symbol(sym.DEFAULT,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.DEFAULT,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 135: break;
           case 66:
-            { print("extends");return new Symbol(sym.EXNTENDS,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.EXNTENDS,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 136: break;
           case 67:
-            { print("package");return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PACKAGE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 137: break;
           case 68:
-            { print("private");return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PRIVATE,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 138: break;
           case 69:
-            { print("protected");return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.PROTECTED,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 139: break;
           case 70:
-            { print("implements");return new Symbol(sym.IMPLEMENTS,yyline,yycolumn, (yytext()));
+            { return new Symbol(sym.IMPLEMENTS,yyline,yycolumn, (yytext()));
             }
             // fall through
           case 140: break;

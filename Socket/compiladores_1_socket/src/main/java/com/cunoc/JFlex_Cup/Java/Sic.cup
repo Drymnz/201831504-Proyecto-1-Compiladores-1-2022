@@ -19,20 +19,21 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
         private List<Method> ListMethods =new ArrayList<>();
         private List<Variable> ListVariable= new ArrayList<>();
         private List<Variable> listParameters= new ArrayList<>();
+        private int errorCounter= 0;
 
         Sintactico(Lexico lexico){
             super(lexico);
         }
         public void syntax_error(Symbol cur_token) {
-        System.out.println("El error es el simbolo: " + sym.terminalNames[cur_token.sym]);
-        System.out.println(String.format("En la posicion: %d, %d", (cur_token.left+1), (cur_token.right+1)));
+            errorCounter++;
+            System.out.print("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }
         /*public void unrecovered_syntax_error(Symbol cur_token) {
             if (cur_token.sym == sym.EOF) {
              System.out.println("public void unrecoveredsyntax_error!!!!!!!!!!!!!!");
             }
         }*/
-        private Symbol getSymbol(){
+        public Symbol getSymbol(){
             return this.s;
         }
 
@@ -101,7 +102,12 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
                 break;
         }
     }
-
+    public String getNameClass(){
+        return this.nameClass;
+    }
+        public int getErrorCounter(){
+            return this.errorCounter;
+        }
         public List<Variable> getListVariable() {
         return ListVariable;
         }
@@ -179,7 +185,8 @@ precedence left ADMIRACION,IGUAL,MAYOR_Q,MENOR_Q, O;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
-inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);:} ;
+inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);:} 
+;
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
 |importacion
@@ -489,6 +496,7 @@ usarVariableFacto ::= SUMA sumarIgual
 |loclaMetodFacto
 |IGUAL tDatos
 |C_APERTURA j C_CIERRE loclaMetodFacto
+|P_APERTURA tDatos P_CIERRE
 ;
 restarIgual ::= IGUAL tDatos
 | RESTA
@@ -507,6 +515,7 @@ sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_C
 |SWITCH P_APERTURA tDatos P_CIERRE L_APERTURA internoSwitch L_CIERRE
 |FOR P_APERTURA inializarVariable  sentenciaFor
 ;
+//sentencia try ca
 //sentencia de switch
 internoSwitch ::= CASE tDatos  DOBLE_PUNTO localSwitch internoSwitch
 |DEFAULT DOBLE_PUNTO localSwitch  
