@@ -5,7 +5,8 @@
 package cunoc.clientapplication;
 
 import cunoc.clientapplication.View.MyWindow;
-import javax.swing.JOptionPane;
+import javax.lang.model.SourceVersion;
+
 
 /**
  *
@@ -14,11 +15,13 @@ import javax.swing.JOptionPane;
 public class Start {
 
     public static void main(String[] args) {
-
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MyWindow().setVisible(true);
+                cunoc.clientapplication.View.MyWindow windos = new MyWindow();
+                windos.setVisible(true);
+                windos.setLocationRelativeTo(null);
             }
         });
     }
+
 }

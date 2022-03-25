@@ -4,7 +4,9 @@
  */
 package cunoc.clientapplication.View;
 
+import cunoc.clientapplication.Logic.Converter.DirectoryToArrayListString;
 import java.io.File;
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -21,8 +23,8 @@ public class AnalyzerProyects extends javax.swing.JPanel {
     private final String PROYECTTWO = "segundo proyecto";
     private final String CONFIR = "¿Esta seguro de analizar?";
 
-    private File fileProyectOne = null;
-    private File fileProyectTwo = null;
+    private String fileProyectOne = "";
+    private String fileProyectTwo = "";
 
     /**
      * Creates new form AnalyzerProyects
@@ -107,32 +109,31 @@ public class AnalyzerProyects extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonSeleectProyect1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSeleectProyect1ActionPerformed
-        selectFile(this.fileProyectOne, SELECTFILE + PROYECTONE);
+        this.fileProyectOne = selectFile(SELECTFILE + PROYECTONE);
     }//GEN-LAST:event_jButtonSeleectProyect1ActionPerformed
 
     private void jButtonSelecctProyect2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSelecctProyect2ActionPerformed
-        selectFile(this.fileProyectTwo, SELECTFILE + PROYECTTWO);
+        this.fileProyectTwo = selectFile(SELECTFILE + PROYECTTWO);
     }//GEN-LAST:event_jButtonSelecctProyect2ActionPerformed
 
     private void jButtonAnalyzerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnalyzerActionPerformed
-        if (this.fileProyectOne == null) {
+        if (this.fileProyectOne.isBlank()) {
             JOptionPane.showMessageDialog(null, PLSSELECT + PROYECTONE);
-        } else if (this.fileProyectTwo == null) {
+        } else if (this.fileProyectTwo.isBlank()) {
             JOptionPane.showMessageDialog(null, PLSSELECT + PROYECTTWO);
         } else if (JOptionPane.showConfirmDialog(null, CONFIR, CONFIR, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
-
+            ArrayList<String> proyectOne = (new DirectoryToArrayListString(new File(this.fileProyectOne))).converterProyect();
+            ArrayList<String> proyectTwo = (new DirectoryToArrayListString(new File(this.fileProyectTwo))).converterProyect();
         }
     }//GEN-LAST:event_jButtonAnalyzerActionPerformed
-    private void selectFile(File file, String menssage) {
+    private String selectFile(String menssage) {
         JFileChooser seleccionarArchivo = new JFileChooser();
-        seleccionarArchivo.setCurrentDirectory(new File("."));
-        seleccionarArchivo.setDialogTitle(menssage);
         seleccionarArchivo.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         seleccionarArchivo.setAcceptAllFileFilterUsed(false);
-        if (seleccionarArchivo.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
-            file = seleccionarArchivo.getCurrentDirectory();
-            
+        if (seleccionarArchivo.showOpenDialog(null) == JFileChooser.APPROVE_OPTION || seleccionarArchivo.getCurrentDirectory() != null) {
+            return seleccionarArchivo.getSelectedFile().getAbsoluteFile().toString();
         }
+        return "";
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
