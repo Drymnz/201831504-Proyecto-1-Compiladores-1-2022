@@ -177,6 +177,7 @@ non terminal sentenciaElse,sentenciaElseFac,opBooleanIGUALFac,textOperar,tDatosF
 non terminal internoSwitch,localSwitch,localSwitchDeclaracion,menorYmayorIgual;
 non terminal operacionNumericaRecusividad,operacionNumericaPrima,operacionNumericaTerminales,igualSimple;
 non terminal secuenciDatos,typeVarible,newParentesisOCochtes;
+non terminal serietDatos,tDatosserietDatos;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
@@ -344,7 +345,13 @@ tDatos ::= P_APERTURA tDatos P_CIERRE tDatosFac
 |usarOBJECT
 ;
 newParentesisOCochtes ::= P_APERTURA  tFact
-| C_APERTURA tDatos C_CIERRE
+| C_APERTURA tDatosserietDatos C_CIERRE serietDatos
+;
+serietDatos ::= L_APERTURA lCon
+|
+;
+tDatosserietDatos ::= tDatos
+|
 ;
 igualSimple ::=IGUAL
 | SUMA
@@ -497,8 +504,9 @@ usarVariableFacto ::= SUMA sumarIgual
 |loclaMetodFacto
 |IGUAL tDatos
 |C_APERTURA j C_CIERRE loclaMetodFacto
-|P_APERTURA tDatos P_CIERRE
+|P_APERTURA  P_CIERRE
 ;
+
 restarIgual ::= IGUAL tDatos
 | RESTA
 ;

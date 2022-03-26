@@ -60,16 +60,22 @@ public class DirectoryToArrayListString {
             //if extension java
             if (fileName.equals(EXTENDS_JAVA)) {
                 String direction = rut.getParent() + OPEN + rut.getFileName().toString();
+                System.out.println("*******************************************************");
+                System.out.println(direction);
+                System.out.println("NAME FILE : " + rut.getFileName().toString());
+                System.out.println("*******************************************************");
                 (new AggregationHandler(proyectFinal, new FileConverter(new File(direction)))).start();
             }
         } else if (!rut.getFileName().toString().isBlank()) {
             viewDirectory(rut.getParent() + OPEN + rut.getFileName().toString());
         }
     }
+    //get extension of file
 
     private String getExtension(String fileName) {
         String fe = "";
         if (fileName.contains(DIVER)) {
+            //return .extends from file
             fe = java.util.Arrays.stream(fileName.split("\\.")).reduce((a, b) -> b).orElse(null);
         }
         return fe;

@@ -29,19 +29,34 @@ public class Sever extends Thread {
         try {
             ServerSocket severt = new ServerSocket(this.port);
             Console.ConsoleText.append("\nEl servidor esta corriendo en el puerto : " + this.port);
-            while (true) {
+            while (severt != null) {
                 Socket socketClient = severt.accept();
-                ObjectOutputStream out = new ObjectOutputStream(socketClient.getOutputStream());
+                Console.ConsoleText.append("\nse conecto alguien");
                 ObjectInputStream in = new ObjectInputStream(socketClient.getInputStream());
-                Package recvPack = (Package) in.readObject();
-                Console.ConsoleText.append(recvPack.getName());
-                //Comparet(listTwo, listadoOne);
+                ObjectOutputStream out = new ObjectOutputStream(socketClient.getOutputStream());
+                ArrayList<ArrayList<String>> list = (ArrayList<ArrayList<String>>) in.readObject();
+                String json = "NADA";
+                if (list.size() == 2) {
+                    json = "";
+                    ArrayList<String> proyectTwo = list.get(0);
+                    ArrayList<String> proyectOne = list.get(1);
+                    json = Comparet(proyectTwo, proyectOne);
+                }
+                out.writeObject(json);
+                Console.ConsoleText.append("\nle envie esto:\n" + json);
+                socketClient.close();
             }
         } catch (Exception e) {
-            Console.ConsoleText.append("Error en el arranque de servidor");
+            e.printStackTrace();
+            Console.ConsoleText.append("\nERROR-> class:SERVER " + e.getMessage());
         }
+        Console.ConsoleText.append("\nEL SERVIDOR SE APAGO");
+
+        //System.exit(0);
     }
-    private void Comparet(ArrayList<String> listTwo,ArrayList<String> listadoOne){
+
+    private String Comparet(ArrayList<String> listTwo, ArrayList<String> listadoOne) {
+        String returnString = "";
         ProjectAnalyzer proyecttwo = new ProjectAnalyzer(listTwo);
         ProjectAnalyzer proyectOne = new ProjectAnalyzer(listadoOne);
         proyectOne.start();
@@ -58,10 +73,11 @@ public class Sever extends Thread {
         if (Analyzer.errorCounter == 0) {
             CompaProyect analyzer = new CompaProyect(poryectOneFinal, poryectTwoFinal);
             JSon result = analyzer.compaAnalyzer();
-            System.out.println(new ConvertirJSon().objectJSonString(result));
+            returnString = new ConvertirJSon().objectJSonString(result);
         } else {
             Console.ConsoleText.append("hay errores en una clase");
         }
+        return returnString;
     }
 
 }

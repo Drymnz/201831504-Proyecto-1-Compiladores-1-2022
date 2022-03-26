@@ -13,6 +13,8 @@ import javax.lang.model.SourceVersion;
  * @author Benjamín de Jesús Pérez Aguilar
  */
 public class Start {
+    
+    public static final int PORT = 20845;
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {

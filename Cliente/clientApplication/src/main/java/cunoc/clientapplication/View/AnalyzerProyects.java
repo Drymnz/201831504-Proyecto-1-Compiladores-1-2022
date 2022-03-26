@@ -5,6 +5,8 @@
 package cunoc.clientapplication.View;
 
 import cunoc.clientapplication.Logic.Converter.DirectoryToArrayListString;
+import cunoc.clientapplication.Logic.Socket.CompareProjects;
+import cunoc.clientapplication.Start;
 import java.io.File;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
@@ -47,6 +49,7 @@ public class AnalyzerProyects extends javax.swing.JPanel {
         jButtonSeleectProyect1 = new javax.swing.JButton();
         jButtonSelecctProyect2 = new javax.swing.JButton();
         jButtonAnalyzer = new javax.swing.JButton();
+        jButtonViewResults = new javax.swing.JButton();
 
         labelProyect1.setText("Proyecto 1");
 
@@ -73,6 +76,9 @@ public class AnalyzerProyects extends javax.swing.JPanel {
             }
         });
 
+        jButtonViewResults.setText("Ver resultado");
+        jButtonViewResults.setEnabled(false);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,7 +94,8 @@ public class AnalyzerProyects extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButtonSeleectProyect1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonSelecctProyect2)))
+                        .addComponent(jButtonSelecctProyect2))
+                    .addComponent(jButtonViewResults, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -104,6 +111,8 @@ public class AnalyzerProyects extends javax.swing.JPanel {
                     .addComponent(jButtonSelecctProyect2))
                 .addGap(18, 18, 18)
                 .addComponent(jButtonAnalyzer)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonViewResults)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -124,6 +133,8 @@ public class AnalyzerProyects extends javax.swing.JPanel {
         } else if (JOptionPane.showConfirmDialog(null, CONFIR, CONFIR, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
             ArrayList<String> proyectOne = (new DirectoryToArrayListString(new File(this.fileProyectOne))).converterProyect();
             ArrayList<String> proyectTwo = (new DirectoryToArrayListString(new File(this.fileProyectTwo))).converterProyect();
+            String json = (new CompareProjects(Start.PORT, proyectOne, proyectTwo,jButtonViewResults)).JSonResults();
+            System.out.println(json);
         }
     }//GEN-LAST:event_jButtonAnalyzerActionPerformed
     private String selectFile(String menssage) {
@@ -140,6 +151,7 @@ public class AnalyzerProyects extends javax.swing.JPanel {
     private javax.swing.JButton jButtonAnalyzer;
     private javax.swing.JButton jButtonSelecctProyect2;
     private javax.swing.JButton jButtonSeleectProyect1;
+    private javax.swing.JButton jButtonViewResults;
     private javax.swing.JLabel labelProyect1;
     private javax.swing.JLabel labelProyect2;
     // End of variables declaration//GEN-END:variables
