@@ -27,6 +27,7 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
         }
         public void syntax_error(Symbol cur_token) {
             errorCounter++;
+            System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
             Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }
         /*public void unrecovered_syntax_error(Symbol cur_token) {
@@ -145,49 +146,50 @@ terminal FINAL,STATIC;//USO DE MEMORIA
 /****************************/
 terminal String DECIMAL,ENTERO,ID,STRING;//TOKEN 
 terminal Stirng TEXT;
-terminal SUMA,RESTA,MULTIPLICACION,DIVISION;//OPERACION
+terminal SUMA_IGUAL,SUMA,CREMENTO,INCREMENTO,RESTA_IGUAL,RESTA,MULTIPLICACION_IGUAL,MULTIPLICACION,MODULO_IGUAL,DIVISION_IGUAL,DIVISION;//OPERACION
 terminal IGUAL,MODULO;//= 
-/*SIMBOLOS OPERADOR RELACIONALES*/
-terminal MENOR_Q,MAYOR_Q,Y,O;
+/*SIMBOLOS OPERADOR RELACIONALES MENOR_Q*/
+terminal TWOO,TWOY,DOUBLE_IGUAL,MENOR_Q_IGUAL,MAYOR_Q_IGUAL,MENOR_Q,MAYOR_Q,ONEY,ONEO,ADMIRACION_IGUAL;
 /**************************AGRUPACION********************************/
 terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
 /*************************************NO TERMINALES******************************************************/
 non terminal inicio;//INICIO DE TODO
-/*c , d , g ,h ,i , k , q ,r,e,w,z,f,u,s,b,n,m,a,l  */
-non terminal String operaionNumerica,j;//operaciones
 /*LA PARTE DE package Y import*/
 non terminal encabezado,importacion,p,sp,spp,pc,vfactorizadoStatic,vfactorizadoVC;
 /*LA CLASE*/
 non terminal clase,internoClase,vc,staticCfianl,v,internoClaseFa,ayuda,herencia,secuenciIDHRE;
 /*VARIABLE GLOBAL O asignacionVariable DE LA CALSE*/
-non terminal asignacionVariable,vGlobal,vChar;
-non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,dosY,dosO,variableStirng, variableObject;
-non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac;
+non terminal asignacionVariable,vGlobal,vChar,tDAtosFacto;
+non terminal numFloat,numEntero, numDouble, variableChar, variableBoolean,variableStirng, variableObject;
+non terminal dSeguidoF,tDatos,variableID,objectInst,vGlobalFac,tDatosPrima;
 /*METODOS*/
-non terminal metodo,pMetodoS,pMetodoSP,soloId;
+non terminal metodo,pMetodoS,pMetodoSP,soloId,realicarSentenciaControl;
 non terminal onlyIDArray,staticFactori,finalFactori;
-non terminal idDatoFac ,tFact,lCon, idDato;
+non terminal idDatoFac ,tFact,lCon, idDato,tDatosDespues;
 /*LOCAL METODO*/
-non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,terminalAccion;
-non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,idGet,variableLocalFinal;
+non terminal variableLocal,local,localMetodo,lConFact,loclaMetodFacto,terminalAccion,arrayID;
+non terminal variableObjectUsarCrear,variableIDLocal,variableSet,usarOBJECT,variableLocalFinal;
 /*SENTENCIAS DE CONTROLS*/
-non terminal sentenciaControl,usarVariable,restarIgual,sumarIgual,usarVariableFacto;
+non terminal sentenciaControl,usarVariable,usarVariableFacto;
 non terminal variableIDFor,sentenciaFor,inializarVariable,forVariableId,forVariableIdFac;
-non terminal sentenciaElse,sentenciaElseFac,opBooleanIGUALFac,textOperar,tDatosFac;
-non terminal internoSwitch,localSwitch,localSwitchDeclaracion,menorYmayorIgual;
-non terminal operacionNumericaRecusividad,operacionNumericaPrima,operacionNumericaTerminales,igualSimple;
-non terminal secuenciDatos,typeVarible,newParentesisOCochtes;
-non terminal serietDatos,tDatosserietDatos;
+non terminal sentenciaElse,sentenciaElseFac,staticImport,factoIDATO;
+non terminal internoSwitch,localSwitch,localSwitchDeclaracion;
+non terminal secuenciDatos,typeVarible,newParentesisOCochtes,typeVaribleSimple,operadorestDatos;
+non terminal serietDatos,tDatosserietDatos,castin,signacionVariableSecuencial,signacionVariableFactori;
 /*************************************PRECEDENCIA******************************************************/
 precedence left SUMA, RESTA;
 precedence left MULTIPLICACION, DIVISION;
-precedence left DIVISION, MODULO;
-precedence left ADMIRACION,IGUAL,MAYOR_Q,MENOR_Q, Y;
-precedence left ADMIRACION,IGUAL,MAYOR_Q,MENOR_Q, O;
+precedence left MODULO,DIVISION;
+precedence left DOUBLE_IGUAL,ADMIRACION_IGUAL;
+precedence left MAYOR_Q_IGUAL,MENOR_Q;
+precedence left MENOR_Q_IGUAL,MAYOR_Q;
+precedence left TWOO,ONEO;
+precedence left TWOY,ONEY;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
-inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);:} 
+inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);
+System.out.println("Final class : "+nameClass);:} 
 ;
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
@@ -197,7 +199,10 @@ encabezado ::= PACKAGE ID pc importacion
 pc ::= PUNTO ID pc
 | p
 ;
-importacion ::= IMPORT ID sp importacion
+importacion ::= IMPORT staticImport ID sp importacion
+|
+;
+staticImport ::= STATIC
 |
 ;
 // punto id, ; , punto * ; , punto id punto * ;
@@ -208,7 +213,10 @@ spp ::= MULTIPLICACION p
 | ID sp
 ;
 p ::=  PUNTO_COMA
-| error {:System.out.println("te falto colocar ;");:}
+| error{:
+System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
 ;
 /*****FINAL PRIMERA PARTE****/
 /*PARTE DE LA CLASE ******************************************************* CLASE CLASE*/
@@ -295,6 +303,10 @@ typeVarible ::= ID
 |SHORT
 |INT
 |LONG
+| error{:
+System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
 ;
 numFloat ::= FLOAT {:typeDate = ListType.FLOAT;:} onlyIDArray;
 numDouble ::= DOUBLE {:typeDate = ListType.DOUBLE;:}  onlyIDArray;
@@ -308,41 +320,78 @@ numEntero ::= BYTE {:typeDate = ListType.BYTE;:} onlyIDArray
 | LONG {:typeDate = ListType.LONG;:} onlyIDArray 
 ;
 //arreay [] | ID
-onlyIDArray ::= ID:a {:nameVariable = a.toString();:}
+onlyIDArray ::= ID:a arrayID {:nameVariable = a.toString();:}
 | C_APERTURA  C_CIERRE {:arrayType();:} onlyIDArray
 ;
-
+arrayID ::= C_APERTURA C_CIERRE
+|
+;
 /*****************FINAL VARIABLE**************/
 /*****************VARIABLES INDIALIZADAS DE UNA CLASE**************/
-asignacionVariable ::=  IGUAL tDatos p
+asignacionVariable ::=  IGUAL tDatos signacionVariableSecuencial
 |p
 ;
+signacionVariableSecuencial ::= p
+|  COMA ID signacionVariableFactori
+;
+signacionVariableFactori ::= IGUAL tDatos signacionVariableSecuencial
+|  p
+;
 //el uso del ()? tDatos : tDatos | ()? tDatos : ()? tDatos : tDatos
-tDatos ::= P_APERTURA tDatos P_CIERRE tDatosFac
-|tDatos IGUAL igualSimple tDatos
-|tDatos MAYOR_Q menorYmayorIgual tDatos
-|tDatos MENOR_Q menorYmayorIgual tDatos
-|tDatos Y dosY tDatos
-|tDatos O dosO tDatos
-|tDatos ADMIRACION IGUAL dosO tDatos 
-|tDatos SUMA tDatos
-|tDatos RESTA tDatos
-|tDatos DIVISION tDatos
-|tDatos MULTIPLICACION tDatos
-|tDatos MODULO tDatos
-|vChar
+tDatos ::= tDAtosFacto tDatosPrima
+;
+tDAtosFacto ::= vChar
 |F
 |L_APERTURA lCon
 |NEW typeVarible newParentesisOCochtes
 |FALSE
 |TRUE
-|ADMIRACION tDatos
-|RESTA tDatos
-|SUMA tDatos
 |ENTERO
 |DECIMAL
-|TEXT textOperar
+|TEXT 
 |usarOBJECT
+|P_APERTURA castin
+|ADMIRACION tDatos
+| error{:
+System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
+;
+tDatosPrima ::= operadorestDatos tDatos
+|
+;
+castin ::=  tDatos P_CIERRE  tDatosDespues
+| typeVaribleSimple P_CIERRE  tDatos
+;
+tDatosDespues ::= operadorestDatos tDatos
+| INTERO tDatos DOBLE_PUNTO tDatos
+|
+;
+typeVaribleSimple ::= FLOAT
+|DOUBLE
+|CHAR
+|BOOLEAN
+|STRING
+|BYTE
+|SHORT
+|INT
+|LONG
+;
+operadorestDatos ::= TWOO
+|TWOY
+|DOUBLE_IGUAL
+|MENOR_Q_IGUAL
+|MAYOR_Q_IGUAL
+|MENOR_Q
+|MAYOR_Q
+|ONEY
+|ONEO
+|ADMIRACION_IGUAL
+|SUMA
+|RESTA
+|MULTIPLICACION
+|DIVISION
+|MODULO
 ;
 newParentesisOCochtes ::= P_APERTURA  tFact
 | C_APERTURA tDatosserietDatos C_CIERRE serietDatos
@@ -351,20 +400,6 @@ serietDatos ::= L_APERTURA lCon
 |
 ;
 tDatosserietDatos ::= tDatos
-|
-;
-igualSimple ::=IGUAL
-| SUMA
-| RESTA
-| DIVISION
-| MULTIPLICACION
-| MODULO
-|
-;
-tDatosFac ::= 
-| INTERO tDatos DOBLE_PUNTO tDatos
-;
-menorYmayorIgual ::= IGUAL
 |
 ;
 //para los char
@@ -387,52 +422,20 @@ lCon ::= tDatos lConFact L_CIERRE
 lConFact ::=  COMA tDatos  lConFact
 |
 ;
-/*FINAL OPERADORES*/
-textOperar ::= SUMA tDatos
-|
-;
-dosY ::= Y
-|
-;
-dosO ::= O
-|
-;
-opBooleanIGUALFac ::=  tDatos
-| IGUAL tDatos
-;
-/*OPERACION NUMERICA*/
-j ::= operacionNumericaRecusividad {::}
-;
-operaionNumerica ::= 
-;
-operacionNumericaRecusividad ::= operacionNumericaPrima operacionNumericaTerminales operacionNumericaPrima
-;
-operacionNumericaPrima ::= SUMA  
-|  RESTA  
-|  DIVISION 
-|  MULTIPLICACION 
-|
-;
-operacionNumericaTerminales ::= RESTA operaionNumerica
-| SUMA operaionNumerica
-| ENTERO
-| DECIMAL
-| TEXT textOperar
-| usarOBJECT
-;
 //USAR OBJECT
 usarOBJECT ::= ID idDato
 ;
 //ARRAY.LETER - 4 ,ID.ID(); //GET
 idDato ::= PUNTO idDatoFac
-|C_APERTURA j C_CIERRE idDato
-|P_APERTURA dSeguidoF P_CIERRE
-|P_APERTURA P_CIERRE
+|C_APERTURA tDatos C_CIERRE idDato
+|P_APERTURA factoIDATO
 |
 ;
-idDatoFac ::= ID  idGet
+factoIDATO ::= dSeguidoF P_CIERRE
+|P_CIERRE
 ;
-idGet ::= idDato
+
+idDatoFac ::= ID  idDato
 ;
 /*****************FINAL VARIABLES INDIALIZADAS DE UNA CLASE**************/
 /***********************************METODOS**************/
@@ -476,17 +479,7 @@ variableIDLocal ::= numFloat
 | variableStirng  
 | numEntero 
 ;
-//asignar al set
-loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear
-| ID 
-|
-;
-variableObjectUsarCrear ::= P_APERTURA variableSet
-|loclaMetodFacto
-;
-variableSet ::= tDatos secuenciDatos P_CIERRE 
-|P_CIERRE
-;
+
 /*CUALQUIER ACCION menos colocar otra sentencia ya no es*/
 usarVariable ::= ID usarVariableFacto
 |THIS loclaMetodFacto
@@ -499,31 +492,41 @@ secuenciDatos ::=  COMA tDatos secuenciDatos
 |
 ;
 // id ++ id-- id+= id -=
-usarVariableFacto ::= SUMA sumarIgual
-|RESTA restarIgual
+usarVariableFacto ::= CREMENTO
+|SUMA_IGUAL tDatos 
+|INCREMENTO
+|RESTA_IGUAL tDatos
+|MULTIPLICACION_IGUAL tDatos
+|DIVISION_IGUAL tDatos
+|MODULO_IGUAL tDatos
+|ID loclaMetodFacto
 |loclaMetodFacto
-|IGUAL tDatos
-|C_APERTURA j C_CIERRE loclaMetodFacto
-|P_APERTURA  P_CIERRE
+|C_APERTURA tDatos C_CIERRE loclaMetodFacto
+|P_APERTURA  factoIDATO
 ;
-
-restarIgual ::= IGUAL tDatos
-| RESTA
+//asignar al set
+loclaMetodFacto ::= PUNTO  ID  variableObjectUsarCrear 
+|
 ;
-sumarIgual ::= IGUAL tDatos
-| SUMA
+variableObjectUsarCrear ::= P_APERTURA variableSet
+|loclaMetodFacto
+;
+variableSet ::= tDatos secuenciDatos P_CIERRE 
+|P_CIERRE
 ;
 terminalAccion ::= RETURN tDatos p
 |BREAK p
 ;
 /*VARIALBES LOCALES DENTRO DE UN METODO*/
 /*SENTENCIAS DE CONTROL*/
-sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE
-|DO L_APERTURA localMetodo L_CIERRE WHILE P_APERTURA tDatos P_CIERRE p
-|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+sentenciaControl ::= WHILE P_APERTURA tDatos P_CIERRE realicarSentenciaControl
+|DO realicarSentenciaControl WHILE P_APERTURA tDatos P_CIERRE p
+|IF P_APERTURA tDatos P_CIERRE realicarSentenciaControl sentenciaElse
 |SWITCH P_APERTURA tDatos P_CIERRE L_APERTURA internoSwitch L_CIERRE
 |FOR P_APERTURA inializarVariable  sentenciaFor
 ;
+realicarSentenciaControl ::= L_APERTURA localMetodo L_CIERRE ;
+
 //sentencia try ca
 //sentencia de switch
 internoSwitch ::= CASE dSeguidoF  DOBLE_PUNTO localSwitch internoSwitch
@@ -533,12 +536,12 @@ internoSwitch ::= CASE dSeguidoF  DOBLE_PUNTO localSwitch internoSwitch
 localSwitch ::= localSwitchDeclaracion  localSwitch 
 |terminalAccion //esto de ultimo si o si
 ;
-localSwitchDeclaracion ::= variableLocal
-|sentenciaControl
+localSwitchDeclaracion ::= variableLocal 
+|sentenciaControl 
 ;
 //sentencia de for
-sentenciaFor ::=  P_CIERRE L_APERTURA localMetodo L_CIERRE
-| tDatos p usarVariable  P_CIERRE L_APERTURA localMetodo L_CIERRE
+sentenciaFor ::=  P_CIERRE realicarSentenciaControl
+| tDatos p usarVariable  P_CIERRE realicarSentenciaControl
 ;
 inializarVariable ::= variableIDFor asignacionVariable
 | ID forVariableId
@@ -549,6 +552,10 @@ variableIDFor ::= numFloat
 | variableBoolean 
 | variableStirng 
 | numEntero 
+| error{:
+System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
 ;
 forVariableId ::= ID forVariableIdFac
 | C_APERTURA C_CIERRE forVariableId
@@ -562,6 +569,10 @@ sentenciaElse ::= ELSE  sentenciaElseFac
 ;
 sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
 |IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+| error {:
+System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+:}
 ;
 /*FINAL SENTENCIAS DE CONTROL*/
 /*FINAL LO QUE SE PUEDE HACER DENTRO DE UN METODO*/

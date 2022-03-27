@@ -60,10 +60,10 @@ public class DirectoryToArrayListString {
             //if extension java
             if (fileName.equals(EXTENDS_JAVA)) {
                 String direction = rut.getParent() + OPEN + rut.getFileName().toString();
-                System.out.println("*******************************************************");
+                /*System.out.println("*******************************************************");
                 System.out.println(direction);
                 System.out.println("NAME FILE : " + rut.getFileName().toString());
-                System.out.println("*******************************************************");
+                Sytem.out.println("*******************************************************");*/
                 (new AggregationHandler(proyectFinal, new FileConverter(new File(direction)))).start();
             }
         } else if (!rut.getFileName().toString().isBlank()) {

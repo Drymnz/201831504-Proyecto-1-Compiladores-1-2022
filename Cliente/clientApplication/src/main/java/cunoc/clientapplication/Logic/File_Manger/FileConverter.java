@@ -21,7 +21,10 @@ public class FileConverter {
             int valor;
             while ((valor = entry.read()) != -1) {
                 char caracter = (char) valor;
-                extract += caracter;
+                if (caracter=='\u007c') {
+                    caracter = '\u0026';
+                }
+                extract += String.valueOf(caracter);
             }
             entry.close();
         } catch (FileNotFoundException ex) {
