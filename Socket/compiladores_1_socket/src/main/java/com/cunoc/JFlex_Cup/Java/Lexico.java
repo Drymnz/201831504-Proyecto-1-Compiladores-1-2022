@@ -590,7 +590,7 @@ public class Lexico implements java_cup.runtime.Scanner {
         listComments.add(new Token((yyline+1),(yycolumn+1),yytext()));
     }
     private void print(String token){
-         Console.ConsoleText.append("\n<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
+        //Console.ConsoleText.append("\n<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
         System.out.println("\n<linea:"+(yyline+1)+"><colum:"+(yycolumn+1)+"><TOKEN:"+yytext()+">");
     }
     

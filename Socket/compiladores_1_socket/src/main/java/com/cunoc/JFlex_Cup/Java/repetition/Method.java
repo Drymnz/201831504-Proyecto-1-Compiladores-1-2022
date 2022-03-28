@@ -7,6 +7,7 @@ import com.cunoc.JFlex_Cup.Token;
 public class Method extends Token {
     private ListType type;
     private List<Variable> listParameters;
+    private boolean flag = false;
 
     public Method( ListType type, List<Variable> listParameters, int x, int y, String lexeme) {
         super(x, y, lexeme);
@@ -29,5 +30,18 @@ public class Method extends Token {
     public void selListParameters(List<Variable> listParameters) {
         this.listParameters = listParameters;
     }
+
+    public void setListParameters(List<Variable> listParameters) {
+        this.listParameters = listParameters;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+    
 
 }

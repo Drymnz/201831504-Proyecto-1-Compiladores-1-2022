@@ -7,6 +7,7 @@ import com.cunoc.JFlex_Cup.Token;
 import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
 import com.cunoc.JFlex_Cup.Java.repetition.Method;
 import com.cunoc.JFlex_Cup.Java.repetition.Variable;
+import com.cunoc.Server.Console;
 import com.cunoc.Simulator.SimulatorVariable;
 
 public class CompaProyect extends Thread {
@@ -35,6 +36,9 @@ public class CompaProyect extends Thread {
                 Thread.sleep(500);
             } while (this.isAlive());
         } catch (Exception e) {
+            String mensaje = "Error en CompaProyect " + e.getMessage();
+            System.out.println(mensaje);
+            Console.ConsoleText.append(mensaje);
         }
         score = score(exportar.getListComments().size(), this.numComments)
                 + score(exportar.getListMethods().size(), this.numMethods)
@@ -49,12 +53,11 @@ public class CompaProyect extends Thread {
         for (ClassSyntax classSyntax : poryectOne) {// n
             for (ClassSyntax classSyntaxComparar : poryectTwo) {// n2
                 // analyzer class
-                List<Method> ListMethodONE = classSyntax.getListMethods();
-                List<Method> ListMethodTWO = classSyntaxComparar.getListMethods();
-                for (Method methodOne : ListMethodONE) {// n3
-                    for (Method methodTWO : ListMethodTWO) {
+                for (Method methodOne : classSyntax.getListMethods()) {// n3
+                    for (Method methodTWO : classSyntaxComparar.getListMethods()) {
                         if (equivalentMethod(methodOne, methodTWO)) {// n4
                             exportar.getListMethods().add(methodOne);
+                            methodTWO.setFlag(true);
                         }
                     }
                 }
@@ -64,9 +67,11 @@ public class CompaProyect extends Thread {
 
     // n
     private boolean equivalentMethod(Method methodOne, Method methodTWO) {
-        if (analyzerNameClass(methodOne.getLexeme(), methodTWO.getLexeme())
-                && equivalentParamet(methodOne.getListParameters(), methodTWO.getListParameters())) {
-            return true;
+        if (!methodTWO.isFlag()) {
+            if (analyzerNameClass(methodOne.getLexeme(), methodTWO.getLexeme())
+                    && equivalentParamet(methodOne.getListParameters(), methodTWO.getListParameters())) {
+                return true;
+            }
         }
         return false;
     }
@@ -91,23 +96,46 @@ public class CompaProyect extends Thread {
     private void analyzerVariable() {
         for (ClassSyntax classSyntax : poryectOne) {// n
             for (ClassSyntax classSyntaxComparar : poryectTwo) {// n2
-                List<Variable> ListVariable = classSyntax.getListVariable();
-                List<Variable> ListVariableTWO = classSyntaxComparar.getListVariable();
-                List<Method> ListVariableMethodTwo = classSyntaxComparar.getListMethods();
-                for (Variable variable : ListVariable) {// n3
-                    // con los atributos
-                    for (Variable variableTWO : ListVariableTWO) {// n4
+                for (Variable variable : classSyntax.getListVariable()) {// n3
+                    // con los atributos clase uno y clase dos
+                    for (Variable variableTWO : classSyntaxComparar.getListVariable()) {// n4
                         if (equivalentVariable(variable, variableTWO)) {
                             exportar.getListVariable().add(new SimulatorVariable(variable, classSyntax.getName(),
                                     classSyntaxComparar.getName()));
+                            variableTWO.setBandera(true);
                         }
                     }
-                    for (Method method : ListVariableMethodTwo) {// n4
-                        List<Variable> ListVariableMethodTWO = method.getListParameters();
-                        for (Variable variableTWO : ListVariableMethodTWO) {
+                    // parametros de clase dos
+                    for (Method method : classSyntaxComparar.getListMethods()) {// n4
+                        for (Variable variableTWO : method.getListParameters()) {
                             if (equivalentVariable(variable, variableTWO)) {
                                 exportar.getListVariable().add(
                                         new SimulatorVariable(variable, classSyntax.getName(), method.getLexeme()));
+                                variableTWO.setBandera(true);
+                            }
+                        }
+                    }
+                }
+                for (Method methodClassOne : classSyntax.getListMethods()) {
+                    //parametros de metos primera clase, con las variables de la segunda
+                    for (Variable variable : methodClassOne.getListParameters()) {
+                        for (Variable variableTWO : classSyntaxComparar.getListVariable()) {// n4
+                            if (equivalentVariable(variable, variableTWO)) {
+                                exportar.getListVariable()
+                                        .add(new SimulatorVariable(variable, methodClassOne.getLexeme(),
+                                                classSyntaxComparar.getName()));
+                                variableTWO.setBandera(true);
+                            }
+                        }
+                        //con sus parametros con 
+                        for (Method method : classSyntaxComparar.getListMethods()) {// n4
+                            for (Variable variableTWO : method.getListParameters()) {
+                                if (equivalentVariable(variable, variableTWO)) {
+                                    exportar.getListVariable().add(
+                                            new SimulatorVariable(variable, method.getLexeme(),
+                                                    classSyntaxComparar.getName()));
+                                    variableTWO.setBandera(true);
+                                }
                             }
                         }
                     }
@@ -151,10 +179,8 @@ public class CompaProyect extends Thread {
             for (ClassSyntax classSyntaxComparar : poryectTwo) {// n2
                 // analyzer class
                 analyzerClass(classSyntax, classSyntaxComparar);// n3
-                List<Token> ListCommentsONE = classSyntax.getListComments();
-                List<Token> ListCommentsTWO = classSyntaxComparar.getListComments();
-                for (Token tokenONE : ListCommentsONE) {// n3
-                    for (Token tokenTWO : ListCommentsTWO) {
+                for (Token tokenONE : classSyntax.getListComments()) {// n3
+                    for (Token tokenTWO : classSyntaxComparar.getListComments()) {
                         if (equivalentComments(tokenONE, tokenTWO)) {
                             exportar.getListComments().add(tokenTWO);
                         }
@@ -167,7 +193,12 @@ public class CompaProyect extends Thread {
     // Repeated variable if identifier and type are the same
     // Variable repetida si el identificador y tipo son lo mismo
     private boolean equivalentVariable(Variable variable, Variable variableTWO) {
-        return (variable.getLexeme().equals(variableTWO.getLexeme())) && (variable.getType() == variableTWO.getType());
+        if (!variableTWO.isBandera()) {
+            return (variable.getLexeme().equals(variableTWO.getLexeme()))
+                    && (variable.getType() == variableTWO.getType());
+        } else {
+            return false;
+        }
     }
 
     // same text
@@ -200,16 +231,13 @@ public class CompaProyect extends Thread {
         conterner(this.poryectTwo);
         conterner(this.poryectOne);
     }
-
+    //total variable counter / contador de total de variables
     private void conterner(ArrayList<ClassSyntax> user) {
         for (ClassSyntax userClass : user) {
-            List<Method> ListMethods = userClass.getListMethods();
-            List<Variable> ListVariable = userClass.getListVariable();
-            List<Token> ListComments = userClass.getListComments();
-            this.numVariable += ListVariable.size();
-            this.numComments += ListComments.size();
-            this.numMethods += ListVariable.size();
-            for (Method element : ListMethods) {
+            this.numVariable += userClass.getListVariable().size();
+            this.numComments += userClass.getListComments().size();
+            this.numMethods += userClass.getListMethods().size();
+            for (Method element : userClass.getListMethods()) {
                 List<Variable> ListVariableListMethods = element.getListParameters();
                 this.numVariable += ListVariableListMethods.size();
             }

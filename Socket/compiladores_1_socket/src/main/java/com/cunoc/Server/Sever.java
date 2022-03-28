@@ -59,7 +59,7 @@ public class Sever extends Thread {
         String returnString = "";
         ProjectAnalyzer proyecttwo = new ProjectAnalyzer(listTwo);
         ProjectAnalyzer proyectOne = new ProjectAnalyzer(listadoOne);
-        //proyectOne.start();
+        proyectOne.start();
         proyecttwo.start();
         try {
             do {
