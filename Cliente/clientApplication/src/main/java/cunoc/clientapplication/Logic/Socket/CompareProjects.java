@@ -45,6 +45,7 @@ public class CompareProjects {
             result = resivido;
             send.close();
             in2.close();
+            socket.close();
         } catch (Exception e) {
             System.out.println("NO SE CONNECTO AL ASERVER");
         }

@@ -1,0 +1,148 @@
+/*************************************CODE******************************************************/
+package com.cunoc.JFlex_Cup.HTML;
+import java_cup.runtime.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import com.cunoc.Server.Console;
+    parser code {:
+        private Symbol s;
+        private int errorCounter= 0;
+
+    Sintactico(Lexico lexico){
+        super(lexico);
+    }
+    public void syntax_error(Symbol cur_token) {
+        errorCounter++;
+        System.out.println("\n"+errorCounter+" - Clase<"+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+        Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+    }
+    public Symbol getSymbol(){
+        return this.s;
+    }
+    public int getErrorCounter(){
+        return this.errorCounter;
+    }
+:}
+/*************************************TERMINALES******************************************************/
+/*SIMBOLOS ARITMETRICOS*/
+terminal SUMA,RESTA,MULTIPLICACION,DIVISION;
+/*HTML*/
+terminal INICIO_HTML,FINAL_HTML;
+terminal INICIO_H,FINAL_H;
+terminal INICIO_TAB,FINAL_TAB;
+terminal INICIO_TR,FINAL_TR;
+terminal INICIO_TH,FINAL_TH;
+terminal INICIO_TD,FINAL_TD;
+terminal INICIO_BR,FINAL_BR;
+terminal COMA;
+/*terminal es string*/
+terminal String TEXT,ID,NUM;
+terminal String INTEGER,STRING;
+terminal USER,RESULT,COMMENT,METHODS,VARIABLE;
+/**************************AGRUPACION********************************/
+terminal P_APERTURA,P_CIERRE,L_APERTURA,L_CIERRE,C_APERTURA,C_CIERRE;
+terminal SIMPLE_COMILLA,PUNTO_COMA,DOBLE_PUNTO,PUNTO;
+/*************************************NO TERMINALES******************************************************/
+non terminal inicio;//INICIO DE TODO
+non terminal html,h,tab,tr,th,td,br,asignar,coma;
+non terminal json,userHtml,userTab,userTr,usreTd,user,userInter,id  ;
+non terminal operacion,j,array,userJson,typeUser;
+/*************************************PRECEDENCIA******************************************************/
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION, DIVISION;
+/*************************************GRAMATICA******************************************************/
+start with inicio;
+/******INICIO DE TODO *****/
+inicio ::=  html
+|json
+;
+/*USER HTML*/
+html ::= INICIO_HTML userHtml FINAL_HTML ;
+
+h ::= INICIO_H userHtml FINAL_H;
+br ::=  INICIO_BR userHtml FINAL_BR;
+
+tab ::= INICIO_TAB userTab FINAL_TAB;
+userTab ::= tr
+|userHtml
+;
+
+tr ::= INICIO_TR tr FINAL_TR;
+userTr ::= th
+|userHtml
+;
+th ::=  INICIO_TH usreTd FINAL_TH;
+usreTd ::= 
+td
+|userHtml
+;
+td ::= INICIO_TD userHtml FINAL_TD;
+/*FINAL USER HTML*/
+userHtml ::= user
+|userInter
+|
+;
+user ::= h
+| tab
+| br
+|USER json USER
+;
+userInter ::= ID
+|USER P_APERTURA json P_CIERRE USER
+;
+/*USER JSON*/
+/*FINAL USER JSON*/
+json ::= asignar
+;
+asignar ::= INTEGER ID coma PUNTO_COMA
+|STRING ID coma PUNTO_COMA
+;
+coma::= COMA ID
+|
+;
+j ::= operacion ;
+operacion ::= operacion SUMA operacion
+|operacion RESTA operacion
+|operacion DIVISION operacion
+|operacion MULTIPLICACION operacion
+|P_APERTURA operacion P_CIERRE
+|ID
+|NUM
+;
+
+userJson ::= RESULT PUNTO typeUser;
+typeUser ::=METHODS array
+|VARIABLE array
+;
+array::= C_APERTURA j C_CIERRE PUNTO ID
+|
+;
+/*
+</ iniciare a definir  de alguna manera />
+Integer Max, i;
+Max=4;
+i=0;
+String texto=”Su score fue de: ”+RESULT.Score
+
+</ Aqui defino el html />
+<html>
+	<h1>$$( texto )$$<h1>
+<table>
+<tr>
+	<th>Numero<th>
+	<th>Variable <th>
+	<th>Tipo <th>
+	<th>Función <th>
+ </tr>
+<for iterador:i hasta:Max;>
+<tr> 
+<td> $$( i )$$<td>
+<td> $$( RESULT.Variables[i].Nombre )$$<td>
+<td> $$( RESULT.Variables[i].Tipo )$$ <td>
+<td> $$( RESULT.Variables[i].Funcion )$$ <td>
+</tr>
+ </for>
+</table>
+</html>
+*/

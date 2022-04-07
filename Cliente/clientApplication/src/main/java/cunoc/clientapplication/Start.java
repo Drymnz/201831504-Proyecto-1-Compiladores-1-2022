@@ -5,21 +5,21 @@
 package cunoc.clientapplication;
 
 import cunoc.clientapplication.View.MyWindow;
+import java.awt.Graphics;
 import javax.lang.model.SourceVersion;
-
 
 /**
  *
  * @author Benjamín de Jesús Pérez Aguilar
  */
 public class Start {
-    
+
     public static final int PORT = 20865;
 
     public static void main(String[] args) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                cunoc.clientapplication.View.MyWindow windos = new MyWindow();
+                cunoc.clientapplication.View.MyWindow windos = new MyWindow() ;
                 windos.setVisible(true);
                 windos.setLocationRelativeTo(null);
             }

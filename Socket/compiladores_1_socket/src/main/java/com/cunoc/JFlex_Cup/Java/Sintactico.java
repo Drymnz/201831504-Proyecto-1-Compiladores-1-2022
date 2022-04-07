@@ -1145,6 +1145,14 @@ public class Sintactico extends java_cup.runtime.lr_parser {
         }
         public void syntax_error(Symbol cur_token) {
             errorCounter++;
+            try {
+              Lexico lexico = (Lexico) this.getScanner();
+              lexico.setReport(lexico.getReport() + "\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
+            } catch (Exception e) {
+              System.out.println("no!!!");
+              Console.ConsoleText.append("no!!!");
+            }
+            
             System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
             Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }

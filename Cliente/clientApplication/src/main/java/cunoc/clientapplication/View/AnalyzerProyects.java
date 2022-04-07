@@ -5,6 +5,7 @@
 package cunoc.clientapplication.View;
 
 import cunoc.clientapplication.Logic.Converter.DirectoryToArrayListString;
+import cunoc.clientapplication.Logic.File_Manger.ManejadorEscrituraArchivo;
 import cunoc.clientapplication.Logic.Socket.CompareProjects;
 import cunoc.clientapplication.Start;
 import java.io.File;
@@ -24,6 +25,8 @@ public class AnalyzerProyects extends javax.swing.JPanel {
     private final String PROYECTONE = "primer proyecto";
     private final String PROYECTTWO = "segundo proyecto";
     private final String CONFIR = "¿Esta seguro de analizar?";
+
+    private String json = "";
 
     private String fileProyectOne = "";
     private String fileProyectTwo = "";
@@ -133,10 +136,20 @@ public class AnalyzerProyects extends javax.swing.JPanel {
         } else if (JOptionPane.showConfirmDialog(null, CONFIR, CONFIR, JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE) == 0) {
             ArrayList<String> proyectOne = (new DirectoryToArrayListString(new File(this.fileProyectOne))).converterProyect();
             ArrayList<String> proyectTwo = (new DirectoryToArrayListString(new File(this.fileProyectTwo))).converterProyect();
-            String json = (new CompareProjects(Start.PORT, proyectOne, proyectTwo,jButtonViewResults)).JSonResults();
-            System.out.println(json);
+            this.json = (new CompareProjects(Start.PORT, proyectOne, proyectTwo, jButtonViewResults)).JSonResults();
+            //System.out.println(json);
+            aguardar(json);
         }
     }//GEN-LAST:event_jButtonAnalyzerActionPerformed
+    private void aguardar(String text) {
+        String mensaje = "Fallo al aguardar";
+        FileNameExtensionFilter filtrado = new FileNameExtensionFilter(".txt", "txt");
+        JFileChooser buscador = new JFileChooser();
+        buscador.setFileFilter(filtrado);
+        mensaje = ((buscador.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) && (new ManejadorEscrituraArchivo()).aguardarTexto((buscador).getSelectedFile(), text)) ? "se aguardo correctamente" : "Fallo al aguardar";
+        JOptionPane.showMessageDialog(null, mensaje);
+    }
+
     private String selectFile(String menssage) {
         JFileChooser seleccionarArchivo = new JFileChooser();
         seleccionarArchivo.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -155,4 +168,9 @@ public class AnalyzerProyects extends javax.swing.JPanel {
     private javax.swing.JLabel labelProyect1;
     private javax.swing.JLabel labelProyect2;
     // End of variables declaration//GEN-END:variables
+
+    public String getJson() {
+        return json;
+    }
+
 }

@@ -30,28 +30,17 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
             System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
             Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
         }
-        /*public void unrecovered_syntax_error(Symbol cur_token) {
-            if (cur_token.sym == sym.EOF) {
-             System.out.println("public void unrecoveredsyntax_error!!!!!!!!!!!!!!");
-            }
-        }*/
+
         public Symbol getSymbol(){
             return this.s;
         }
 
        private void addVariable (int aleft,int aright){
-          /*  System.out.println("***************VARIABLE******************");
-            System.out.println("tipo:"+typeDate+"x:"+(aright+1)+"y:"+(aleft+1)+"name:"+nameVariable);
-            System.out.println("****************************************");*/
             ListVariable.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
             typeDate=null;
             nameVariable = "";
         }
         private void addMethods (int aleft,int aright){
-            /*
-            System.out.println("***************METODOS******************");
-            System.out.println("tipo:"+typeDate+"x:"+(aright+1)+"y:"+(aleft+1)+"name:"+nameMethods);
-            System.out.println("****************************************");*/
             if(typeMethods ==null){
                 typeMethods = ListType.CONSTRUCTOR;
             }
@@ -61,9 +50,6 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
             nameVariable = "";
         }
         private void addMethodsParameters (int aleft,int aright){
-            /*System.out.println("*Methods Parameters");
-            System.out.println("tipo:"+typeDate+"x:"+(aright+1)+"y:"+(aleft+1)+"name:"+nameVariable);
-            System.out.println("****************************************");*/
             listParameters.add(new Variable(typeDate,aright+1,aleft+1,nameVariable));
             typeDate=null;
             nameVariable = "";
@@ -188,8 +174,7 @@ precedence left TWOY,ONEY;
 /*************************************GRAMATICA******************************************************/
 start with inicio;
 /******INICIO DE TODO *****/
-inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);
-System.out.println("Final class : "+nameClass);:} 
+inicio ::= encabezado clase {:classFinalSystax = new ClassSyntax(nameClass, ListMethods, ListVariable, null);:} 
 ;
 /*****PRIMERA PARTE*******/
 encabezado ::= PACKAGE ID pc importacion
@@ -202,6 +187,7 @@ pc ::= PUNTO ID pc
 importacion ::= IMPORT staticImport ID sp importacion
 |
 ;
+// import static id
 staticImport ::= STATIC
 |
 ;
@@ -567,8 +553,8 @@ forVariableIdFac ::= DOBLE_PUNTO ID
 sentenciaElse ::= ELSE  sentenciaElseFac
 |
 ;
-sentenciaElseFac ::= L_APERTURA localMetodo L_CIERRE
-|IF P_APERTURA tDatos P_CIERRE L_APERTURA localMetodo L_CIERRE sentenciaElse
+sentenciaElseFac ::= realicarSentenciaControl
+|IF P_APERTURA tDatos P_CIERRE realicarSentenciaControl sentenciaElse
 | error {:
 System.out.println("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));
 Console.ConsoleText.append("\n"+errorCounter+" - Clase<"+nameClass+"> en simbolo<" + sym.terminalNames[cur_token.sym]+String.format(">posicion: <%d>, <%d>", (cur_token.left+1), (cur_token.right+1)));

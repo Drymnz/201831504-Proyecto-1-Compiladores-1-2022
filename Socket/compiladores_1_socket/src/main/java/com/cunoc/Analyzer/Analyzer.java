@@ -33,6 +33,7 @@ public class Analyzer implements Runnable {
                 prueva = sic.getClassSyntax();
                 prueva.setListComments(lexema.getlistComments());
                 errorCounter += sic.getErrorCounter();
+                System.out.println(lexema.getReport());
             } catch (Exception e) {
                 Symbol s = sic.getSymbol();
                 errorCounter += sic.getErrorCounter();

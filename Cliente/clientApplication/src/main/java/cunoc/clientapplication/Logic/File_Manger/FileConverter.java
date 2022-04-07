@@ -24,7 +24,18 @@ public class FileConverter {
                 if (caracter=='\u007c') {
                     caracter = '\u0026';
                 }
-                extract += String.valueOf(caracter);
+                String add = String.valueOf(caracter);
+                if (add.equals("\\")) {
+                    if ((valor = entry.read()) != -1) {
+                        char siguiente = (char) valor;
+                        String siguienteChar = String.valueOf(siguiente);
+                        add += siguienteChar;
+                        if (siguienteChar.equals("\"")) {
+                            add = "";
+                        }
+                    }
+                }
+                extract += add;
             }
             entry.close();
         } catch (FileNotFoundException ex) {

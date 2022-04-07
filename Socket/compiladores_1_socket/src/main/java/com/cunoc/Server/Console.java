@@ -20,7 +20,17 @@ public class Console extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        ConsoleText = new javax.swing.JTextArea();
+        ConsoleText = new javax.swing.JTextArea() {
+            private int counter = 1;
+            private final String textLine = "\nLINEA : ";
+
+            @Override
+            public void append(String str) {
+                String add = textLine + counter+"  "+ str;
+                super.append(add);
+                counter++;
+            }
+        };
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Console");

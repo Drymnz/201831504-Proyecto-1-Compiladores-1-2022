@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 import com.cunoc.Analyzer.Analyzer;
+import com.cunoc.Analyzer.CompaHTML;
 import com.cunoc.Analyzer.CompaProyect;
 import com.cunoc.Analyzer.ConvertirJSon;
 import com.cunoc.Analyzer.JSon;
@@ -15,6 +16,7 @@ import com.cunoc.JFlex_Cup.Java.repetition.ClassSyntax;
 
 public class Sever extends Thread {
     private final int port;
+    private final String NADA = "NADA";
 
     public Sever(int port) {
         this.port = port;
@@ -26,33 +28,44 @@ public class Sever extends Thread {
 
     @Override
     public void run() {
-        try {
-            ServerSocket severt = new ServerSocket(this.port);
-            Console.ConsoleText.append("\nEl servidor esta corriendo en el puerto : " + this.port);
-            while (severt != null) {
+        int attempts = 0;
+        while (attempts < 10) {
+            try {
+                ServerSocket severt = new ServerSocket(this.port);
+                Console.ConsoleText.append("\nEl servidor esta corriendo en el puerto : " + this.port);
+                Console.ConsoleText.append("\nEstoy a la espera");
                 Socket socketClient = severt.accept();
                 Console.ConsoleText.append("\nse conecto alguien");
                 ObjectInputStream in = new ObjectInputStream(socketClient.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(socketClient.getOutputStream());
-                ArrayList<ArrayList<String>> list = (ArrayList<ArrayList<String>>) in.readObject();
-                String json = "NADA";
-                if (list.size() == 2) {
-                    json = "";
-                    ArrayList<String> proyectTwo = list.get(0);
-                    ArrayList<String> proyectOne = list.get(1);
-                    json = Comparet(proyectTwo, proyectOne);
-                }
+                Object getCliente = in.readObject();
+                String json = res(getCliente);
                 out.writeObject(json);
                 Console.ConsoleText.append("\nle envie esto:\n" + json);
                 socketClient.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+                attempts++;
+                Console.ConsoleText.append("\nERROR-> class:SERVER " + e.getMessage());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Console.ConsoleText.append("\nERROR-> class:SERVER " + e.getMessage());
         }
-        Console.ConsoleText.append("\nEL SERVIDOR SE APAGO");
+        // System.exit(0);
+    }
 
-        //System.exit(0);
+    private String res(Object get) {
+        if (get instanceof ArrayList) {
+            ArrayList<ArrayList<String>> list = (ArrayList<ArrayList<String>>) get;
+            if (list.size() == 2) {
+                ArrayList<String> proyectTwo = list.get(0);
+                ArrayList<String> proyectOne = list.get(1);
+                return Comparet(proyectTwo, proyectOne);
+            }
+        }
+        if (get instanceof String) {
+            String text = (String) get;
+            return (new CompaHTML(text)).compaHTML();
+        }
+        return NADA;
     }
 
     private String Comparet(ArrayList<String> listTwo, ArrayList<String> listadoOne) {

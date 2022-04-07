@@ -35,16 +35,6 @@ public class ProjectAnalyzer extends Thread{
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-            /*Thread one = new Thread(new Analyzer(element, proyect));
-            one.start();
-            try {
-                do {
-                    
-                } while (one.isAlive());
-
-            } catch (Exception e) {
-                //TODO: handle exception
-            }*/
         }        
     }
  }
